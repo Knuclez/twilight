@@ -1,0 +1,6 @@
+build/src/interface/input.o: src/interface/input.c \
+ include/interface/rendering/gui_entities.h include/interface/input.h \
+ include/interface/scenes.h
+include/interface/rendering/gui_entities.h:
+include/interface/input.h:
+include/interface/scenes.h:

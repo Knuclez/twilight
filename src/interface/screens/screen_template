@@ -1,0 +1,32 @@
+#include <SDL2/SDL.h>
+#include <stdio.h>
+
+#include "interface/screens/field_screen.h"
+#include "interface/rendering/render_auxs.h"
+#include "interface/rendering/gui_entities.h"
+
+
+void field_screen_entity_clicked(int id_ent, SDL_Event event){
+    return;
+}
+
+void field_screen_key_event(SDL_Event event){
+    return;
+}
+
+void field_screen_input_event(SDL_Event event){
+    return;
+}
+
+void present_field_screen(SDL_Renderer *renderer){
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+   
+    SDL_RenderPresent(renderer);
+}
+
+void load_field_screen_gui_entities(){
+    //SDL_Rect map_rect = {X_INITIAL_OFF, Y_INITIAL_OFF, MAP_WIDTH, MAP_HEIGHT};
+    //append_new_entity(map_rect, NULL, 601, 0, 0x01);
+    return;
+}
