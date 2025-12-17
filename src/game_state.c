@@ -3,7 +3,7 @@
 GameState game_state;
 
 int initialize_game_state(){
-    initialize_scene(&game_state.current_scene);
+    start_scenes(&game_state.current_scene);
     return 1;
 }
 

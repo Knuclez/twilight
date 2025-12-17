@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
-#include "ecs/ec_list_template.h"
-#include "ecs/id_list_template.h"
 #include "interface/rendering/render_main.h"
 #include "interface/input.h"
-#include "game_state.h"
 #include "game_manager.h"
 
 const int FPS = 30;
@@ -19,11 +16,7 @@ int initialize_stuff(){
 	return 0;
     }
 
-    int gs_status = initialize_game_state();
-    if (gs_status == 0){
-	printf("Error initializing game state\n");
-	return 0;
-    }
+    initialize_game_systems();
     last_frame_time = SDL_GetTicks();
 
     return 1;

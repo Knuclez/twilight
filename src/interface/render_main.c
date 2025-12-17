@@ -5,7 +5,7 @@
 #include "interface/rendering/render_auxs.h"
 #include "interface/rendering/gui_entities.h"
 #include "interface/rendering/texturing.h"
-#include "interface/scenes.h"
+#include "interface/screens_switch.h"
 
 SDL_Window* window;
 SDL_Renderer* renderer;

@@ -3,7 +3,7 @@
 
 #include "interface/rendering/gui_entities.h"
 #include "interface/input.h"
-#include "interface/scenes.h"
+#include "interface/screens_switch.h"
 
 
 int check_for_clicked_entity(int x, int y){

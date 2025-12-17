@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include "interface/rendering/gui_entities.h"
-#include "interface/scenes.h"
+#include "interface/screens_switch.h"
 
 GUI_Entity *all_entities;
 ComponentList click_entities;
