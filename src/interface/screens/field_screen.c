@@ -5,6 +5,7 @@
 #include "interface/screens/field_screen.h"
 #include "interface/rendering/render_auxs.h"
 #include "interface/rendering/gui_entities.h"
+#include "ecs/position_ecs.h"
 
 
 void field_screen_entity_clicked(int id_ent, SDL_Event event){
@@ -25,9 +26,12 @@ void draw_cloud(SDL_Renderer *r){
     SDL_RenderCopy(r, nub->txt, NULL, &rect);
 }
 
-void draw_cow(SDL_Renderer *r){
-    GUI_Entity *ent = get_entity_by_id(102);
+void draw_cow(SDL_Renderer *r, int id){
+    GUI_Entity *ent = get_entity_by_id(id);
+    Position *pos = get_id_associated_position(id);
     SDL_Rect rect = ent->rect;
+    rect.x = pos->x;
+    rect.y = pos->y;
     SDL_RenderCopy(r, ent->txt, NULL, &rect);
 }
 
@@ -35,12 +39,15 @@ void present_field_screen(SDL_Renderer *renderer){
     SDL_SetRenderDrawColor(renderer, 0, 210, 0, 255);
     SDL_RenderClear(renderer);
 
-    draw_cow(renderer);
+    draw_cow(renderer, 102);
+    draw_cow(renderer, 103);
     draw_cloud(renderer);
     SDL_RenderPresent(renderer);
 }
 
 //void append_new_entity(SDL_Rect rect,SDL_Texture *txt, int id, int z, unsigned char flags)
+//por motivos de agilidad y testeo voy a harcodear los IDs(es decir machearlos a los que declaro
+//en mi load_ents() de screen.c) pero despues tendria que hacer un loader o algo dinmaico
 void load_field_screen_gui_entities(){
     SDL_Rect nube_rect = {10, 10, 100, 50};
     SDL_Texture *nube_tx = get_texture_by_index(0);
@@ -48,6 +55,7 @@ void load_field_screen_gui_entities(){
     
     SDL_Rect vaca_rect = {100, 10, 50, 50};
     SDL_Texture *vaca_tx = get_texture_by_index(1);
-    append_new_entity(vaca_rect, vaca_tx, 102, 0, 0x00);
+    append_new_entity(vaca_rect, vaca_tx, 102, 0, 0x00); 
+    append_new_entity(vaca_rect, vaca_tx, 103, 0, 0x00);
     return;
 }

@@ -11,7 +11,7 @@ void scene_switch_mouse_button(int clicked_entity_id){
     Scene *cs = get_current_scene_p(gs);
 
     switch(cs->type){
-	case FIELD_SCREEN:
+	case FIELD_SCENE:
 	    field_screen_entity_clicked(clicked_entity_id, gs);
 	    break;
     }
@@ -24,7 +24,7 @@ void scene_switch_input_event(SDL_Event event){
     Scene *cs = get_current_scene_p(gs);
 
     switch(cs->type){
-	case FIELD_SCREEN:
+	case FIELD_SCENE:
     	    field_screen_input_event(event);
 	    break;
     }
@@ -36,7 +36,7 @@ void scene_switch_keydown(SDL_Event event){
     Scene *cs = get_current_scene_p(gs);
 
     switch(cs->type){
-        case FIELD_SCREEN:
+        case FIELD_SCENE:
 	    field_screen_key_event(event);
 	    break;
     }
@@ -44,7 +44,7 @@ void scene_switch_keydown(SDL_Event event){
 
 void switch_gui_entities_loading(SceneType s_type){
     switch(s_type){
-	case FIELD_SCREEN:
+	case FIELD_SCENE:
 	    load_field_screen_gui_entities();
 	    break;
     }
@@ -58,7 +58,7 @@ void switch_scene_rendering(SDL_Renderer *renderer){
 
 
     switch(type){
-	case(FIELD_SCREEN):
+	case(FIELD_SCENE):
 	    present_field_screen(renderer);
 	    break;
     }

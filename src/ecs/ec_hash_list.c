@@ -33,7 +33,7 @@ EntityComponent* search_ec_in_bucket(ECBucket list[], int ec_id, int bucket_inde
 	    return &b->bucket[i];
 	}
     }
-    printf("Entity not found in current bucket, should search in next one \n");
+    //printf("Entity not found in current bucket, should search in next one \n");
     return NULL;
 }
 
@@ -88,8 +88,8 @@ int get_component_index_by_id(ECBucket list[], int id){
     if(ec != NULL){
 	return ec->component_index;
     }
-    printf("EC not found for id:%u \n", id);
-    printf("returning component index -1 \n");
+    printf("EC not found for id:%u", id);
+    printf(" returning component index -1 \n");
     return -1;
 }
 

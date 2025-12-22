@@ -1,7 +1,7 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-#include "scenes.h"
+#include "scenes/scenes_main.h"
 
 typedef struct {
     Scene current_scene;

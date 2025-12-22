@@ -1,7 +1,7 @@
 #ifndef SCENES_H
 #define SCENES_H
 
-typedef enum {FIELD_SCREEN} SceneType;
+typedef enum {FIELD_SCENE} SceneType;
 
 typedef union {
     SceneType type;

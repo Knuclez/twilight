@@ -34,7 +34,7 @@ int register_position(int n_x, int n_y){
    return posCompAmount - 1;
 }
 
-void register_position_to_id(int id, int x, int y){
+void add_position_component_to_id(int id, int x, int y){
     int index = register_position(x, y);
     //if(is_ec_registered(posIdList, id) == 1){
 //	printf("entity %u allready registered \n", id);

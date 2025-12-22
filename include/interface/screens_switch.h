@@ -2,7 +2,7 @@
 #define SCREEN_SWITCH_H
 
 
-#include "scenes.h"
+#include "scenes/scenes_main.h"
 
 void scene_switch_mouse_button(int clicked_entity_id);
 void scene_switch_keydown();
