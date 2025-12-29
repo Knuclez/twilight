@@ -5,6 +5,9 @@
 #include "interface/input.h"
 #include "interface/screens_switch.h"
 
+#include "ecs/position_ecs.h"
+#include "ecs/size_ecs.h"
+
 
 int check_for_clicked_entity(int x, int y){
     ComponentList *click_list = get_click_entities();
@@ -19,13 +22,14 @@ int check_for_clicked_entity(int x, int y){
 
     for (int i = 0; i < click_list->amount; i++){
 	GUI_Entity *ent = (click_list->list)[i];
-	SDL_Rect ent_rect = ent->rect; //la lista de entities ocn el componente de activas
-	if ( x< ent_rect.x ||
-		ent_rect.x + ent_rect.w < x){
+	Position *pos = get_id_associated_position(ent->id);
+	Size *size = get_id_associated_size(ent->id);
+	if ( x< pos->x ||
+		pos->x + size->w < x){
 	    continue;
 	}
-	if ( y<ent_rect.y ||
-		ent_rect.y + ent_rect.h < y){
+	if ( y<pos->y ||
+		pos->y + size->h < y){
 	    continue;
 	}
 	res_l[res_quant] = *ent;

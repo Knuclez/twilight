@@ -10,6 +10,6 @@ int init_position_ecs();
 void add_position_component_to_id(int id, int x, int y);
 int get_position_component_amount();
 Position* get_id_associated_position(int id);
-Position* get_position_by_index(int id);
+Position* get_position_by_index(int indx);
 
 #endif

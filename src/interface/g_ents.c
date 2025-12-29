@@ -89,9 +89,8 @@ void add_to_component_list(ComponentList *c_list, GUI_Entity *ent){
     c_list->amount += 1;
 }
 
-GUI_Entity instance_new_entity(SDL_Rect r_rect,SDL_Texture *r_txt,int r_id, int r_z, unsigned char r_flags){
-    GUI_Entity new = {.id = r_id, 
-		    .rect = r_rect,
+GUI_Entity instance_new_entity(SDL_Texture *r_txt,int r_id, int r_z, unsigned char r_flags){
+    GUI_Entity new = {.id = r_id,
 		    .txt = r_txt,
 		    .z = r_z,
 		    .flags = r_flags};
@@ -111,8 +110,8 @@ void append_to_component_lists(GUI_Entity *ent){
     }
 }
 
-void append_new_entity(SDL_Rect rect,SDL_Texture *txt, int id, int z, unsigned char flags){
-    GUI_Entity new_entity = instance_new_entity(rect, txt, id, z, flags);
+void append_new_entity(SDL_Texture *txt, int id, int z, unsigned char flags){
+    GUI_Entity new_entity = instance_new_entity(txt, id, z, flags);
     if (entities_amount == current_size){
 	expand_entities_space();
     }
