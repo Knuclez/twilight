@@ -53,9 +53,12 @@ void load_textures(SDL_Renderer *renderer){
         return;
     }
 
+    load_img_texture(renderer, 0, "assets/images/bigatlas.png"); 
+    /*
+     *
     load_img_texture(renderer, 0, "assets/images/nubev0.png"); 
     load_img_texture(renderer, 1, "assets/images/vaca_frontv0.png"); 
-    /*
+     *
     SDL_Surface *login_sfc = TTF_RenderText_Solid(arena_font, "Please login", white);
     SDL_Surface *msg_sfc = TTF_RenderText_Solid(arena_font, "Welcome", white);
     textures[0] = SDL_CreateTextureFromSurface(renderer, login_sfc);
