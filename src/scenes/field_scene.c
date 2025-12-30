@@ -19,9 +19,16 @@ void instance_grass(int id, int x, int y){
     add_is_drawable_component_to_id(id);
 }
 
+void instance_tree(int id, int x, int y){
+    add_position_component_to_id(id, x, y);
+    add_size_component_to_id(id, 128, 128);
+    add_is_drawable_component_to_id(id);
+}
+
 void field_scene_load_ecs(){
     instance_cow(102, 10, 300);
     instance_cow(103, 100, 400);
 
     instance_grass(104, 200, 350);
+    instance_tree(105, 300, 100);
 }

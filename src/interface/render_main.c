@@ -3,7 +3,6 @@
 
 #include "interface/rendering/render_main.h"
 #include "interface/rendering/render_auxs.h"
-#include "interface/rendering/gui_entities.h"
 #include "interface/rendering/texturing.h"
 #include "interface/screens_switch.h"
 
@@ -36,12 +35,10 @@ int initialice_sdl(){
     init_texture_modules();
 
     load_textures(renderer);
-    alloc_gui_entities_space();
     return 1;
 }
 
 void terminate_sdl(){
-    unload_scene_gui_entities();
     free_textures();
     terminate_texture_modules();
     SDL_DestroyRenderer(renderer);

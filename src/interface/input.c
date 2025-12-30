@@ -1,29 +1,22 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
-#include "interface/rendering/gui_entities.h"
 #include "interface/input.h"
 #include "interface/screens_switch.h"
 
+#include "ecs/is_clickable_ecs.h"
 #include "ecs/position_ecs.h"
 #include "ecs/size_ecs.h"
 
 
 int check_for_clicked_entity(int x, int y){
-    ComponentList *click_list = get_click_entities();
-    if (click_list == NULL){
-	return -1;
-    }
-    //si el click esta entre los boundes, dame el de mayor orden Z
-    GUI_Entity res = {.id = -1};
-    int len = sizeof(GUI_Entity) * click_list->amount; 
-    GUI_Entity *res_l = malloc(len);
-    int res_quant = 0;
-
-    for (int i = 0; i < click_list->amount; i++){
-	GUI_Entity *ent = (click_list->list)[i];
-	Position *pos = get_id_associated_position(ent->id);
-	Size *size = get_id_associated_size(ent->id);
+    int clickAmount = get_clickable_comp_amount();
+    int* clickList = get_clickable_entities();
+    int id = -1; 
+    for (int i = 0; i < clickAmount; i++){
+	id = *(clickList + i);
+	Position *pos = get_id_associated_position(id);
+	Size *size = get_id_associated_size(id);
 	if ( x< pos->x ||
 		pos->x + size->w < x){
 	    continue;
@@ -32,9 +25,9 @@ int check_for_clicked_entity(int x, int y){
 		pos->y + size->h < y){
 	    continue;
 	}
-	res_l[res_quant] = *ent;
-	res_quant++;
     }
+
+    /*
     if (res_quant > 0){
 	res = res_l[0];
 	for(int j = 1; j < res_quant; j++){
@@ -43,7 +36,8 @@ int check_for_clicked_entity(int x, int y){
 	    }
 	}
     }
-    return res.id; 
+    */
+    return id; 
 }
 
 void interpret_mouse_button(SDL_Event event){

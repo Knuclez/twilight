@@ -42,10 +42,10 @@ void scene_switch_keydown(SDL_Event event){
     }
 }
 
-void switch_gui_entities_loading(SceneType s_type){
+void switch_init_screen(SceneType s_type){
     switch(s_type){
 	case FIELD_SCENE:
-	    load_field_screen_gui_entities();
+	    init_field_screen();
 	    break;
     }
     return;
