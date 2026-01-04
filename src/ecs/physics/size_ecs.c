@@ -42,6 +42,10 @@ void add_size_component_to_id(int id, int w, int h){
     register_ec(sizeIdList, id, index);
 }
 
+void remove_size_from_id(int id){
+    int cmp_indx = get_component_index_by_id(sizeIdList, id);
+    change_ec(sizeIdList, id, -1);
+}
 int init_size_ecs(){
     return init_ec_hash_list(sizeIdList);
 }

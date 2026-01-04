@@ -17,6 +17,8 @@ typedef struct {
 
 int init_ec_hash_list(ECBucket list[]);
 void register_ec(ECBucket list[], int id, int component_index); 
+void change_ec(ECBucket list[], int id, int component_index);
 int is_ec_registered(ECBucket list[], int id);
 int get_component_index_by_id(ECBucket list[], int id);
+int get_component_index_by_id_no_warning(ECBucket list[], int id);
 #endif

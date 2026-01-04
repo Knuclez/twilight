@@ -9,6 +9,10 @@ int get_cow_comp_amount(){
     return cowCompAmount;
 }
 
+int* get_cow_ids(){
+    return cows;
+}
+
 void add_is_cow_component_to_id(int id){
     cows[cowCompAmount] = id;
     cowCompAmount += 1;

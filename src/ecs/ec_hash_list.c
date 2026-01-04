@@ -2,7 +2,6 @@
 #include <string.h>
 #include "ecs/ec_hash_list.h"
 
-ECBucket bucket_list[LIST_SIZE];
 
 int hash_int(int i){
     return i % LIST_SIZE;
@@ -48,6 +47,14 @@ int ec_exists(ECBucket list[], int id){
     return 1;
 }
 
+int ec_exists_no_warning(ECBucket list[], int id){
+    int hash = hash_int(id);
+    if(search_ec_in_bucket(list, id, hash) == NULL){
+	return 0;
+    }
+    return 1;
+}
+
 void print_comp(ECBucket list[], int id){
     int hash = hash_int(id);
     EntityComponent *ec = search_ec_in_bucket(list, id, hash);
@@ -72,11 +79,26 @@ int init_ec_hash_list(ECBucket list[]){
 }
 
 void register_ec(ECBucket list[], int id, int component_index){
+    if (ec_exists_no_warning(list, id) == 1){
+	change_ec(list, id, component_index);
+	printf("mete un cambio al registrar, osea q ya habia algo registrado \n");
+    }
     EntityComponent ec;
     initialize_ec(&ec, id, component_index);
     copy_ec_to_bucket(list, &ec);
     //test_ec(id);
 }
+
+void change_ec(ECBucket list[], int id, int n_component_index){
+    int hash = hash_int(id);
+    EntityComponent *ec = search_ec_in_bucket(list, id, hash);
+    if(ec == NULL){
+	printf("Couldnt find the EC to change the value \n");
+	return;
+    }
+    ec->component_index = n_component_index;
+}
+
 
 int is_ec_registered(ECBucket list[], int id){
     return ec_exists(list, id);
@@ -88,9 +110,15 @@ int get_component_index_by_id(ECBucket list[], int id){
     if(ec != NULL){
 	return ec->component_index;
     }
-    printf("EC not found for id:%u", id);
-    printf(" returning component index -1 \n");
     return -1;
 }
 
+int get_component_index_by_id_no_warning(ECBucket list[], int id){
+    int hash = hash_int(id);
+    EntityComponent *ec = search_ec_in_bucket(list, id, hash);
+    if(ec != NULL){
+	return ec->component_index;
+    }
+    return -1;
+}
 

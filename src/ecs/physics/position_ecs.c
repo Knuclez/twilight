@@ -42,6 +42,12 @@ void add_position_component_to_id(int id, int x, int y){
     register_ec(posIdList, id, index);
 }
 
+
+void remove_position_from_id(int id){
+    //int cmp_indx = get_component_index_by_id(posIdList, id);
+    change_ec(posIdList, id, -1);
+}
+
 int init_position_ecs(){
     return init_ec_hash_list(posIdList);
 }

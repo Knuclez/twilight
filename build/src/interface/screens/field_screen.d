@@ -3,10 +3,13 @@ build/src/interface/screens/field_screen.o: \
  include/interface/rendering/texturing.h \
  include/interface/screens/field_screen.h \
  include/interface/rendering/render_auxs.h include/ecs/direction_ecs.h \
- include/ecs/position_ecs.h include/ecs/size_ecs.h
+ include/ecs/position_ecs.h include/ecs/size_ecs.h \
+ include/ecs/source_rect_ecs.h include/ecs/is_drawable_ecs.h
 include/interface/rendering/texturing.h:
 include/interface/screens/field_screen.h:
 include/interface/rendering/render_auxs.h:
 include/ecs/direction_ecs.h:
 include/ecs/position_ecs.h:
 include/ecs/size_ecs.h:
+include/ecs/source_rect_ecs.h:
+include/ecs/is_drawable_ecs.h:
