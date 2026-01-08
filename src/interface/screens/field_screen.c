@@ -38,7 +38,7 @@ void draw_entity(SDL_Renderer *r, int id){
     }
     if(dir != NULL){
 	sprite_shift = 66 * (*dir);
-    }
+    } 
     SDL_Rect rect = {pos->x, pos->y, size->w, size->h};
     SDL_Rect source_rect = {src_rct->x + sprite_shift, src_rct->y,  src_rct->w, src_rct->h};
     SDL_RenderCopy(r, big_atlas, &source_rect, &rect);

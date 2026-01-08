@@ -110,6 +110,7 @@ int get_component_index_by_id(ECBucket list[], int id){
     if(ec != NULL){
 	return ec->component_index;
     }
+    printf("nao existe id: %u en component\n", id);
     return -1;
 }
 

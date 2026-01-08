@@ -33,6 +33,9 @@ void add_is_cow_food_component_to_id(int id){
 
 void remove_is_cow_food_from_id(int id){
     int cmp_indx = get_component_index_by_id(isCowFoodIdList, id);
+    if (cmp_indx == -1){
+	return;
+    }
     cowFood[cmp_indx] = -1;
     change_ec(isCowFoodIdList, id, -1);
 }

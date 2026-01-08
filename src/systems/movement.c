@@ -3,6 +3,7 @@
 #include <time.h>
 #include "systems/movement.h"
 #include "systems/targeting.h"
+#include "action_q.h"
 #include "ecs/direction_ecs.h"
 #include "ecs/position_ecs.h"
 #include "ecs/target_ecs.h"
@@ -25,7 +26,7 @@ Direction move_random(int i, Position *pos, float speed){
     return res;
 }
 
-Direction move_towards_target(int tgt_id, Position *pos, float speed){
+Direction move_towards_target(int cow_id, int tgt_id, Position *pos, float speed){
     Position *tgt_pos = get_id_associated_position(tgt_id);
     if (tgt_pos == NULL){
 	return DOWN;
@@ -33,8 +34,12 @@ Direction move_towards_target(int tgt_id, Position *pos, float speed){
     int x_diff = tgt_pos->x - pos->x;
     int y_diff = tgt_pos->y - pos->y;
     if(abs(x_diff) + abs(y_diff) < 10){
-	remove_target_entity(tgt_id);
-	printf("llego al objetivo \n");
+	Action new;
+	new.type = ANIMAL_EAT;
+	new.data = malloc(sizeof(int) * 2);
+	*(new.data) = cow_id;
+	*(new.data + 1) = tgt_id;
+	queue_action(new);
 	return DOWN;
     }
     int norm_x = x_diff / abs(x_diff);
@@ -60,7 +65,7 @@ void move_cows(float delta){
 
 	int target_id = get_id_associated_target(cow_id);
 	if(target_id != -1){
-	    new_dir = move_towards_target(target_id, pos, speed);	    
+	    new_dir = move_towards_target(cow_id, target_id, pos, speed);	    
 	} else {
 	    new_dir = move_random(i, pos, speed);
 	    scan_for_food(cow_id, pos);

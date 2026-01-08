@@ -7,6 +7,8 @@
 #include "ecs/size_ecs.h"
 #include "ecs/source_rect_ecs.h"
 
+#include "systems/digestion.h"
+
 void instance_cow(int id, int x, int y){
     add_is_cow_component_to_id(id);
     add_position_component_to_id(id, x, y);  
@@ -41,7 +43,7 @@ void instance_tree(int id, int x, int y){
 
 void remove_field_entity(int id){
 //naive grass removal
-    if(id == 104){
+    if(is_id_cow_food(id) == 1){
 	remove_grass(id);
     }
 }
@@ -49,7 +51,26 @@ void remove_field_entity(int id){
 void field_scene_load_ecs(){
     instance_cow(102, 500, 300);
     instance_cow(103, 100, 400);
+    /*
+    instance_cow(106, 700, 300);
+    instance_cow(107, 50, 30);
 
+    start_digestion(102);
+    start_digestion(103);
+    start_digestion(106);
+    start_digestion(107);
     instance_grass(104, 200, 350);
     instance_tree(105, 300, 100);
+    */
+
+    instance_cow(104, 700, 300);
+    instance_cow(105, 50, 30);
+
+    start_digestion(102);
+    start_digestion(103);
+    start_digestion(104);
+    start_digestion(105);
+    instance_grass(106, 200, 350);
+    instance_tree(107, 300, 100);
+
 }

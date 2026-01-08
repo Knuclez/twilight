@@ -18,7 +18,7 @@ Direction* get_direction_by_index(int indx){
 }
 
 Direction* get_id_associated_direction(int id){
-    int dir_index = get_component_index_by_id(dirIdList, id);
+    int dir_index = get_component_index_by_id_no_warning(dirIdList, id);
     if (dir_index == -1){
 	return NULL;
     }

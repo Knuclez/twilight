@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
     if ((initialize_stuff()) == 0){
 	return 0;
     }
+    printf("hola \n");
 
     Uint32 last_frame_time = SDL_GetTicks();
     while(looping){
@@ -41,7 +42,7 @@ int main(int argc, char* argv[])
 	float delta = elapsed_time / 1000.0f;
 
 	process_input(&looping);
-	update(delta);
+	update(current_time, delta);
 	render();
 
 	Uint32 frame_time = SDL_GetTicks() - current_time;

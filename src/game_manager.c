@@ -1,34 +1,16 @@
 #include <stdio.h>
 #include "game_manager.h"
 #include "game_state.h"
+#include "action_q.h"
+#include "ecs/init_ecs.h"
 #include "systems/movement.h"
-#include "ecs/direction_ecs.h"
-#include "ecs/position_ecs.h"
-#include "ecs/size_ecs.h"
-#include "ecs/source_rect_ecs.h"
-#include "ecs/target_ecs.h"
-#include "ecs/is_cow_ecs.h"
-#include "ecs/is_cow_food_ecs.h"
-#include "ecs/is_clickable_ecs.h"
-#include "ecs/is_drawable_ecs.h"
+#include "systems/targeting.h"
+#include "systems/digestion.h"
 
-
-void initialize_ecs(){
-    if(init_position_ecs() == 0){
-	printf("failiure initializing position ecs \n");
-    }
-    init_is_cow_ecs();
-    init_is_cow_food_ecs();
-    init_is_clickable_ecs();
-    init_is_drawable_ecs();
-    init_direction_ecs();
-    init_size_ecs();
-    init_source_rect_ecs();
-    init_target_ecs();
-
-}
 
 void initialize_game_systems(){
+    init_digestion_system();
+
     initialize_ecs();
 
     if(initialize_game_state() == 0){
@@ -37,8 +19,27 @@ void initialize_game_systems(){
 
 }
 
-void update(float delta){
+void process_action_q(int current_time){
+    int actn_amt = get_actions_amount();
+    Action *act_list = get_actions_queue();
+    for(int i = 0; i < actn_amt ; i++){
+	Action actn = *(act_list + i);
+	switch(actn.type){
+	    case ANIMAL_EAT:
+		int cow_id = *(actn.data);
+		int tgt_id = *(actn.data + 1);
+		start_digestion(cow_id);
+		remove_target_entity(tgt_id);
+		break;
+	}
+    }
+    clean_action_queue();
+}
+
+void update(int current_time, float delta){
+    process_action_q(current_time);
     tick_movement_system(delta);
+    tick_digestion_system(current_time);
     return;
 }
 
