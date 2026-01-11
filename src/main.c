@@ -31,7 +31,6 @@ int main(int argc, char* argv[])
     if ((initialize_stuff()) == 0){
 	return 0;
     }
-    printf("hola \n");
 
     Uint32 last_frame_time = SDL_GetTicks();
     while(looping){

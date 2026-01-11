@@ -1,3 +1,6 @@
+#include <string.h>
+#include <stdio.h>
+#include "tools/console.h"
 #include "scenes/field_scene.h"
 #include "ecs/is_cow_ecs.h"
 #include "ecs/is_cow_food_ecs.h"
@@ -41,6 +44,13 @@ void instance_tree(int id, int x, int y){
     add_source_rect_component_to_id(id, 66, 66, 64, 64);
 }
 
+void instance_poo(int id, int x, int y){
+    add_position_component_to_id(id, x, y);
+    add_size_component_to_id(id, 64, 64);
+    add_is_drawable_component_to_id(id);
+    add_source_rect_component_to_id(id, 132, 66, 64, 64);
+}
+
 void remove_field_entity(int id){
 //naive grass removal
     if(is_id_cow_food(id) == 1){
@@ -48,29 +58,27 @@ void remove_field_entity(int id){
     }
 }
 
+void test_console(){
+    const char prueba[] = "3,3,4,\n";
+    int len = strlen(prueba); 
+    printf("%d len:\n", len);
+    interpret_command(prueba, len); 
+}
+
+void instance_rapp(EntityKey *key){
+   is_rapp_component_add(key);
+}
+
 void field_scene_load_ecs(){
     instance_cow(102, 500, 300);
     instance_cow(103, 100, 400);
-    /*
-    instance_cow(106, 700, 300);
-    instance_cow(107, 50, 30);
-
-    start_digestion(102);
-    start_digestion(103);
-    start_digestion(106);
-    start_digestion(107);
-    instance_grass(104, 200, 350);
-    instance_tree(105, 300, 100);
-    */
 
     instance_cow(104, 700, 300);
     instance_cow(105, 50, 30);
 
-    start_digestion(102);
-    start_digestion(103);
-    start_digestion(104);
-    start_digestion(105);
     instance_grass(106, 200, 350);
     instance_tree(107, 300, 100);
-
+    instance_rapp(new_entity());
 }
+
+

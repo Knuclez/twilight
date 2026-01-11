@@ -2,16 +2,20 @@
 #include "game_manager.h"
 #include "game_state.h"
 #include "action_q.h"
+#include "entities.h"
 #include "ecs/init_ecs.h"
 #include "systems/movement.h"
 #include "systems/targeting.h"
 #include "systems/digestion.h"
 
 
+
 void initialize_game_systems(){
     init_digestion_system();
 
+    init_entities_list();
     initialize_ecs();
+    init_console();
 
     if(initialize_game_state() == 0){
 	printf("failiure initializing game state \n");

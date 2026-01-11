@@ -54,6 +54,7 @@ void load_textures(SDL_Renderer *renderer){
     }
 
     load_img_texture(renderer, 0, "assets/images/bigatlas.png"); 
+    load_img_texture(renderer, 1, "assets/images/rapp_cooked.png");
     /*
      *
     load_img_texture(renderer, 0, "assets/images/nubev0.png"); 

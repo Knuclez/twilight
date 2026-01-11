@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "systems/digestion.h"
+#include "scenes/field_scene.h"
+#include "ecs/position_ecs.h"
 
 typedef int TimeStamp;
 
@@ -26,12 +28,14 @@ void free_digestions(){
     DigestionNode *next;    
     //printf("%p to clean \n", to_clean);
     while(to_clean != NULL){
+	Position *cow_pos = get_id_associated_position(to_clean->animal_id);
+	instance_poo(108, cow_pos->x, cow_pos->y);
 	next = to_clean->previous_node;
 	free(to_clean);
 	to_clean = next;
 	//printf("to_clean : %p \n", to_clean);
     }
-    printf("termina digestions \n");
+    //printf("termina digestions \n");
 }
 
 void move_buckets_pointers() {
@@ -53,9 +57,6 @@ void tick_digestion_system(TimeStamp current_time){
     if(current_time > last_second + one_second){
 	//printf("second: %u \n", last_second);
 	move_buckets_pointers();
-	if(3000 < last_second && last_second < 4000){
-	    start_digestion(108);
-	}
 	//printf("termina el second \n");
 	last_second = current_time;
     }
