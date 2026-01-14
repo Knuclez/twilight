@@ -13,7 +13,7 @@ OBJ      = $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
 DEP      = $(OBJ:.o=.d)
 
 # === Ejecutable ===
-TARGET   = granji 
+TARGET   = tw 
 
 # === Regla principal ===
 all: $(TARGET)

@@ -15,6 +15,8 @@ typedef enum {
     STR2INT_INCONVERTIBLE
 } str2int_errno;
 
+
+void console_init();
 void interpret_command(const char *s, int size);
 
 #endif

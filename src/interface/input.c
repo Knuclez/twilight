@@ -4,12 +4,10 @@
 #include "interface/input.h"
 #include "interface/screens_switch.h"
 
-#include "ecs/is_clickable_ecs.h"
-#include "ecs/position_ecs.h"
-#include "ecs/size_ecs.h"
 
 
 int check_for_clicked_entity(int x, int y){
+    /*
     int clickAmount = get_clickable_comp_amount();
     int* clickList = get_clickable_entities();
     int id = -1; 
@@ -36,8 +34,9 @@ int check_for_clicked_entity(int x, int y){
 	    }
 	}
     }
-    */
     return id; 
+    */
+    return 0; 
 }
 
 void interpret_mouse_button(SDL_Event event){

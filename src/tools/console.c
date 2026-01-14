@@ -120,7 +120,7 @@ void interpret_command(const char *csv, int len){
    
 }
 
-void init_console(){
+void console_init(){
     last_id_console = 0;
     return;
 }
