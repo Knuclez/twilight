@@ -6,7 +6,7 @@
 #include "interface/screens/field_screen.h"
 
 
-void scene_switch_mouse_button(int clicked_entity_id){
+void screen_switch_mouse_button(int clicked_entity_id){
     GameState *gs = get_game_state_p();
     Scene *cs = get_current_scene_p(gs);
 
@@ -19,7 +19,7 @@ void scene_switch_mouse_button(int clicked_entity_id){
 }
 
 
-void scene_switch_input_event(SDL_Event event){
+void screen_switch_input_event(SDL_Event event){
     GameState *gs = get_game_state_p();
     Scene *cs = get_current_scene_p(gs);
 
@@ -31,13 +31,24 @@ void scene_switch_input_event(SDL_Event event){
 }
 
 
-void scene_switch_keydown(SDL_Event event){
+void screen_switch_keydown(SDL_Event event){
     GameState *gs = get_game_state_p();
     Scene *cs = get_current_scene_p(gs);
 
     switch(cs->type){
         case FIELD_SCENE:
 	    field_screen_key_event(event);
+	    break;
+    }
+}
+
+void screen_switch_keyup(SDL_Event event){
+    GameState *gs = get_game_state_p();
+    Scene *cs = get_current_scene_p(gs);
+
+    switch(cs->type){
+        case FIELD_SCENE:
+	    field_screen_key_up_event(event);
 	    break;
     }
 }
@@ -51,7 +62,7 @@ void switch_init_screen(SceneType s_type){
     return;
 }
 
-void switch_scene_rendering(SDL_Renderer *renderer){
+void switch_screen_rendering(SDL_Renderer *renderer){
     GameState *gs = get_game_state_p();
     Scene *cs = get_current_scene_p(gs);
     SceneType type = cs->type;

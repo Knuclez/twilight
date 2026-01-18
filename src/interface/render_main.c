@@ -48,5 +48,5 @@ void terminate_sdl(){
 
 
 void render(){
-    switch_scene_rendering(renderer);
+    switch_screen_rendering(renderer);
 }

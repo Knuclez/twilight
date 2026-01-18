@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include "tools/console.h"
 #include "scenes/field_scene.h"
-#include "entities.h"
+//#include "entities.h"
+#include "game_state.h"
 
+#include "components/direction_comp.h"
 #include "components/position_comp.h"
 #include "components/texture_indx_comp.h"
 
@@ -16,9 +18,13 @@ void test_console(){
 }
 
 void instance_rapp(){
+    GameState *gs = get_game_state_p();
     EntityKey key = entity_create();
     int bitmask = 0;
+
+    gs->player_key = key;
     position_component_add(key, 150, 100);
+    direction_component_add(key);
     texture_component_add(key, 1);
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= IS_MOVABLE_MASK;

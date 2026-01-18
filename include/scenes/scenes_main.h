@@ -3,6 +3,7 @@
 
 typedef enum {FIELD_SCENE} SceneType;
 
+//esta data podria ser un bitmask y hacer algo como components tal vez
 typedef union {
     SceneType type;
     void *data;

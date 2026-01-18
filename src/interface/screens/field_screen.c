@@ -5,16 +5,39 @@
 #include "interface/screens/field_screen.h"
 #include "interface/rendering/render_auxs.h"
 #include "scenes/field_scene.h"
+#include "animations/field_animations.h"
 
-#include "entities.h"
+//#include "entities.h"
+#include "game_state.h"
+#include "systems/movement.h"
 #include "components/position_comp.h"
 #include "components/texture_indx_comp.h"
+#include "components/direction_comp.h"
 
 void field_screen_entity_clicked(int id_ent, SDL_Event event){
     return;
 }
 
 void field_screen_key_event(SDL_Event event){
+    EntityKey player = (get_game_state_p())->player_key;
+    Direction *ds = directions_get();
+    int dir_indx = direction_index_get_from_key(player);
+    switch(event.key.keysym.sym){
+	case SDLK_d:
+	    ds[dir_indx] = E;
+	    break;
+	case SDLK_a:
+	    ds[dir_indx] = W;
+	    break;
+    }
+    return;
+}
+
+void field_screen_key_up_event(SDL_Event event){
+    EntityKey player = (get_game_state_p())->player_key;
+    Direction *ds = directions_get();
+    int dir_indx = direction_index_get_from_key(player);
+    ds[dir_indx] = IDLE; 
     return;
 }
 
@@ -82,5 +105,14 @@ void present_field_screen(SDL_Renderer *renderer){
 //por motivos de agilidad y testeo voy a harcodear los IDs(es decir machearlos a los que declaro
 //en mi load_ents() de screen.c) pero despues tendria que hacer un loader o algo dinmaico
 void init_field_screen(){
+    rapp_animations_load(IDLE, 5, 600, 0, 1);
+    rapp_animations_load(NW, 79, 84, 66, 8);
+    rapp_animations_load(N, 79, 170, 66, 8);
+    rapp_animations_load(NE, 79, 256, 66, 8);
+    rapp_animations_load(W, 79, 342, 66, 8);
+    rapp_animations_load(E, 79, 428, 66, 8);
+    rapp_animations_load(SW, 79, 514, 66, 8);
+    rapp_animations_load(S, 79, 600, 66, 8);
+    rapp_animations_load(SE, 79, 686, 66, 8);
     return;
 }

@@ -4,7 +4,7 @@
 #include "game_state.h"
 #include "action_q.h"
 
-#include "entities.h"
+//#include "entities.h"
 #include "systems/movement.h"
 
 

@@ -4,8 +4,6 @@
 #include "interface/input.h"
 #include "interface/screens_switch.h"
 
-
-
 int check_for_clicked_entity(int x, int y){
     /*
     int clickAmount = get_clickable_comp_amount();
@@ -44,19 +42,23 @@ void interpret_mouse_button(SDL_Event event){
     if (id_res == -1){
 	return;
     }
-    scene_switch_mouse_button(id_res);
+    screen_switch_mouse_button(id_res);
     return;
 }
 
 void interpret_input_event(SDL_Event event){
-    scene_switch_input_event(event);
+    screen_switch_input_event(event);
 }
 
 void interpret_keydown(SDL_Event event, int *looping){
     if (event.key.keysym.sym == SDLK_ESCAPE){
 	*looping = 0;
     }
-    scene_switch_keydown(event);
+    screen_switch_keydown(event);
+}
+
+void interpret_keyup(SDL_Event event){
+    screen_switch_keyup(event);
 }
 
 void process_input(int *looping){
@@ -68,6 +70,9 @@ void process_input(int *looping){
 		break;
 	    case SDL_KEYDOWN:
 		interpret_keydown(event, looping);
+		break;
+	    case SDL_KEYUP:
+		interpret_keyup(event);
 		break;
 	    case SDL_MOUSEBUTTONDOWN:
 		interpret_mouse_button(event);
