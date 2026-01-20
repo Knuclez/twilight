@@ -4,12 +4,13 @@
 #include "interface/rendering/texturing.h"
 #include "interface/screens/field_screen.h"
 #include "interface/rendering/render_auxs.h"
+#include "interface/animations_rsc.h"
 #include "scenes/field_scene.h"
-#include "animations/field_animations.h"
 
 //#include "entities.h"
 #include "game_state.h"
 #include "systems/movement.h"
+#include "components/animation_rsc_index.h"
 #include "components/position_comp.h"
 #include "components/texture_indx_comp.h"
 #include "components/direction_comp.h"
@@ -71,22 +72,42 @@ void draw_entity(SDL_Renderer *r, int id){
 
 void draw_entities(SDL_Renderer *r){
     EntityKey *ents = entities_get();
-    int ents_amount = entities_amount();
+    int ents_amount = entities_max_index();
 
     Position *positions = positions_get();
     int *textures = textures_index_get();
+    int *animation_rsc_indexes = animation_resource_indexes_get();
+    AnimationRsc *animation_rscs = animation_rscs_get();
+
+    int pos_indx;
+    int txt_indx;
+    int animation_rsc_index_index;
+    int animation_rsc_index;
+
+    AnimationRsc anim_data;
+    Position position;
+    SDL_Texture *txt;
     for(int i = 0; i < ents_amount; i++){
 	EntityKey key = *(ents + i);
 	int bitmask = key.bitmask;
 
 	if(bitmask & IS_DRAWABLE_MASK){
-	    int pos_indx = position_index_get_from_key(key);
-	    int txt_indx = texture_get_index_by_key(key);
-	    SDL_Texture *txt = get_texture_by_index(txt_indx);
-	    Position pos = *(positions + pos_indx);
-	    SDL_Rect rect = {pos.x, pos.y, 130, 160};
-	    SDL_Rect src_rect = {5, 84, 65, 81};
-	    SDL_RenderCopy(r, txt, &src_rect, &rect);
+	    //arbitrary deault seetinf for anim_data, just because it fits the rapp_atlas
+	    anim_data.sprite_x = 5;
+	    anim_data.sprite_y = 84;
+	    pos_indx = position_index_get_from_key(key);
+	    txt_indx = texture_get_index_by_key(key);
+
+	    position = *(positions + pos_indx);
+	    txt = get_texture_by_index(txt_indx);
+	    if(bitmask & HAS_ANIMATION_MASK){
+		animation_rsc_index_index = animation_resource_index_get_from_key(key);
+		animation_rsc_index = *(animation_rsc_indexes + animation_rsc_index_index);
+		anim_data = *(animation_rscs + animation_rsc_index);
+	    }
+	    SDL_Rect output_rect = {position.x, position.y, 130, 160};
+	    SDL_Rect src_rect = {anim_data.sprite_x , anim_data.sprite_y, 65, 81};
+	    SDL_RenderCopy(r, txt, &src_rect, &output_rect);
 	}
     }
 }
@@ -105,14 +126,5 @@ void present_field_screen(SDL_Renderer *renderer){
 //por motivos de agilidad y testeo voy a harcodear los IDs(es decir machearlos a los que declaro
 //en mi load_ents() de screen.c) pero despues tendria que hacer un loader o algo dinmaico
 void init_field_screen(){
-    rapp_animations_load(IDLE, 5, 600, 0, 1);
-    rapp_animations_load(NW, 79, 84, 66, 8);
-    rapp_animations_load(N, 79, 170, 66, 8);
-    rapp_animations_load(NE, 79, 256, 66, 8);
-    rapp_animations_load(W, 79, 342, 66, 8);
-    rapp_animations_load(E, 79, 428, 66, 8);
-    rapp_animations_load(SW, 79, 514, 66, 8);
-    rapp_animations_load(S, 79, 600, 66, 8);
-    rapp_animations_load(SE, 79, 686, 66, 8);
     return;
 }

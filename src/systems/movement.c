@@ -10,7 +10,7 @@
 
 int movement_system_tick(void *v_ents, float delta){
     EntityKey *ents = (EntityKey*) v_ents;
-    int ents_size = entities_amount();
+    int ents_size = entities_max_index();
     Position *positions = positions_get();
     Direction * directions = directions_get();
 

@@ -2,14 +2,14 @@
 #include "entities.h"
 
 EntityKey entities[200];
-
+int max_index;
 
 EntityKey* entities_get(){
     return entities;
 }
 
-int entities_amount(){
-    return 200;
+int entities_max_index(){
+    return max_index;
 }
 
 EntityKey entity_create(){
@@ -21,6 +21,7 @@ EntityKey entity_create(){
 	    new.index = i;
 	    new.generation = entities[i].generation + 1;
 	    entities[i] = new;	    
+	    max_index = i + 1;
 	    return entities[i];
 	}
     }
@@ -38,6 +39,7 @@ void entity_add_bitmask(EntityKey key, int n_bitmas){
 
 
 void entities_list_init(){
+    max_index = 0;
     for(int i = 0; i<200;i++){
 	EntityKey new;
 	new.index = -1;
