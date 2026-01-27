@@ -75,17 +75,20 @@ void draw_entities(SDL_Renderer *r){
     int ents_amount = entities_max_index();
 
     Position *positions = positions_get();
+    Direction *directions = directions_get();
     int *textures = textures_index_get();
     int *animation_rsc_indexes = animation_resource_indexes_get();
     AnimationRsc *animation_rscs = animation_rscs_get();
 
     int pos_indx;
+    int dir_indx;
     int txt_indx;
     int animation_rsc_index_index;
     int animation_rsc_index;
 
     AnimationRsc anim_data;
     Position position;
+    Direction direction;
     SDL_Texture *txt;
     for(int i = 0; i < ents_amount; i++){
 	EntityKey key = *(ents + i);
@@ -93,17 +96,22 @@ void draw_entities(SDL_Renderer *r){
 
 	if(bitmask & IS_DRAWABLE_MASK){
 	    //arbitrary deault seetinf for anim_data, just because it fits the rapp_atlas
-	    anim_data.sprite_x = 5;
-	    anim_data.sprite_y = 84;
+	    //anim_data.sprite_x = 5;
+	    //anim_data.sprite_y = 84;
 	    pos_indx = position_index_get_from_key(key);
 	    txt_indx = texture_get_index_by_key(key);
+	    dir_indx = direction_index_get_from_key(key);
+
 
 	    position = *(positions + pos_indx);
 	    txt = get_texture_by_index(txt_indx);
 	    if(bitmask & HAS_ANIMATION_MASK){
-		animation_rsc_index_index = animation_resource_index_get_from_key(key);
-		animation_rsc_index = *(animation_rsc_indexes + animation_rsc_index_index);
-		anim_data = *(animation_rscs + animation_rsc_index);
+		//animation_rsc_index_index = animation_resource_index_get_from_key(key);
+		//animation_rsc_index = *(animation_rsc_indexes + animation_rsc_index_index);
+		//anim_data = *(animation_rscs + animation_rsc_index);
+		anim_data = rapp_animation_rsc_get(); 
+		direction = *(directions + dir_indx);
+		anim_data.sprite_x += (anim_data.x_offset * (int)direction);
 	    }
 	    SDL_Rect output_rect = {position.x, position.y, 130, 160};
 	    SDL_Rect src_rect = {anim_data.sprite_x , anim_data.sprite_y, 65, 81};

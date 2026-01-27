@@ -28,10 +28,11 @@ EntityComponent* search_ec_in_bucket(ECBucket list[], EntityKey ec_key, int buck
     ECBucket *b = &list[bucket_index];
     int i = 0;
     while(i < b->current_size){
-	EntityKey i_ec_key = b->bucket[i].ent_key;
-	if(i_ec_key.generation == ec_key.generation && i_ec_key.index == ec_key.index){
-	    return &b->bucket[i];
-	}
+	    EntityKey i_ec_key = b->bucket[i].ent_key;
+	    if(i_ec_key.generation == ec_key.generation && i_ec_key.index == ec_key.index){
+	        return &b->bucket[i];
+	    }
+        i++;
     }
     //printf("Entity not found in current bucket, should search in next one \n");
     return NULL;

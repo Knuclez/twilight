@@ -9,5 +9,5 @@ typedef struct{
 }AnimationRsc;
 
 AnimationRsc* animation_rscs_get();
-
+AnimationRsc rapp_animation_rsc_get();
 #endif

@@ -26,6 +26,8 @@ void instance_rapp(){
     position_component_add(key, 150, 100);
     direction_component_add(key);
     texture_component_add(key, 1);
+    animation_resource_index_component_add(key, 1);
+    bitmask |= HAS_ANIMATION_MASK;
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= IS_MOVABLE_MASK;
     bitmask |= IS_PLAYER_MASK;
