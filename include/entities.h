@@ -1,5 +1,5 @@
 #ifndef ENTITIES_H
-#define ENITIES_H
+#define ENTITIES_H
 
 #define LIST_SIZE 50
 #define BUCKET_SIZE 10

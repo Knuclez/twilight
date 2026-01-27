@@ -8,11 +8,8 @@ AnimationRsc* animation_rscs_get(){
 
 AnimationRsc rapp_animation_rsc_get(){
     AnimationRsc rapp_walk_rsc;
-    rapp_walk_rsc.sprite_x = 79;
-    rapp_walk_rsc.sprite_y = 428;
     rapp_walk_rsc.x_offset = 66;
     rapp_walk_rsc.frame_amount = 8;
     return rapp_walk_rsc;
-
 }
 

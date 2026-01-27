@@ -7,7 +7,9 @@
 
 #include "components/direction_comp.h"
 #include "components/position_comp.h"
+#include "components/sprite_source_comp.h"
 #include "components/texture_indx_comp.h"
+#include "components/animation_rsc_index.h"
 
 
 void test_console(){
@@ -24,6 +26,7 @@ void instance_rapp(){
 
     gs->player_key = key;
     position_component_add(key, 150, 100);
+    sprite_source_component_add(key, 79, 428, 65, 81);  // ⭐ NUEVO: sprite_source
     direction_component_add(key);
     texture_component_add(key, 1);
     animation_resource_index_component_add(key, 1);
