@@ -26,10 +26,10 @@ void instance_rapp(){
 
     gs->player_key = key;
     position_component_add(key, 150, 100);
-    sprite_source_component_add(key, 79, 428, 65, 81);  // ⭐ NUEVO: sprite_source
+    sprite_source_component_add(key, 79, 84, 65, 81);  // ⭐ NUEVO: sprite_source
     direction_component_add(key);
     texture_component_add(key, 1);
-    animation_resource_index_component_add(key, 1);
+    animation_resource_index_component_add(key, 0);
     bitmask |= HAS_ANIMATION_MASK;
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= IS_MOVABLE_MASK;

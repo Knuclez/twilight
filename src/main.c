@@ -4,7 +4,7 @@
 #include "interface/input.h"
 #include "game_manager.h"
 
-const int FPS = 30;
+const int FPS = 60;
 const int FRAME_TIME = 1000/ FPS;
 int looping;
 Uint32 last_frame_time;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
 	process_input(&looping);
 	update(current_time, delta);
-	render();
+	render(delta);
 
 	Uint32 frame_time = SDL_GetTicks() - current_time;
 	if (frame_time < FRAME_TIME) {

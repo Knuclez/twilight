@@ -15,7 +15,7 @@ int movement_system_tick(void *v_ents, float delta){
     int pos_count = position_count_get();
     int *ent_bitmasks = entity_bitmasks;
     
-    int speed = 100;
+    int speed = 200;
     
     // ⭐ ITERACION EFICIENTE: Solo sobre entidades con posición
     for (int pos_idx = 0; pos_idx < pos_count; pos_idx++) {
@@ -49,6 +49,7 @@ int movement_system_tick(void *v_ents, float delta){
             int mov = speed * delta;
             switch(dir) {
                 case N:
+                    pos->y -= mov;
                     break;
                 case E:
                     pos->x += mov;

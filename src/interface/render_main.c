@@ -4,7 +4,8 @@
 #include "interface/rendering/render_main.h"
 #include "interface/rendering/render_auxs.h"
 #include "interface/rendering/texturing.h"
-#include "interface/screens_switch.h"
+#include "interface/screen.h"
+#include "interface/animations_rsc.h"
 
 SDL_Window* window;
 SDL_Renderer* renderer;
@@ -33,8 +34,9 @@ int initialice_sdl(){
     }
 
     init_texture_modules();
-
+    animation_rscs_init();
     load_textures(renderer);
+    screen_init();
     return 1;
 }
 
@@ -47,6 +49,6 @@ void terminate_sdl(){
 }
 
 
-void render(){
-    switch_screen_rendering(renderer);
+void render(float delta){
+    screen_present(renderer, delta);
 }

@@ -1,8 +1,9 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
+#include "interface/screen.h"
 #include "interface/input.h"
-#include "interface/screens_switch.h"
+#include "input_handler.h"
 
 int check_for_clicked_entity(int x, int y){
     /*
@@ -42,23 +43,23 @@ void interpret_mouse_button(SDL_Event event){
     if (id_res == -1){
 	return;
     }
-    screen_switch_mouse_button(id_res);
+    screen_entity_clicked(id_res);
     return;
 }
 
-void interpret_input_event(SDL_Event event){
-    screen_switch_input_event(event);
+void interpret_text_event(SDL_Event event){
+    screen_text_event(event);
 }
 
 void interpret_keydown(SDL_Event event, int *looping){
     if (event.key.keysym.sym == SDLK_ESCAPE){
 	*looping = 0;
     }
-    screen_switch_keydown(event);
+    event_key_down_handle(event);
 }
 
 void interpret_keyup(SDL_Event event){
-    screen_switch_keyup(event);
+    event_key_up_handle(event);
 }
 
 void process_input(int *looping){
@@ -78,7 +79,7 @@ void process_input(int *looping){
 		interpret_mouse_button(event);
 	        break;
 	    case SDL_TEXTINPUT:
-		interpret_input_event(event);
+		interpret_text_event(event);
 
 	}
     }

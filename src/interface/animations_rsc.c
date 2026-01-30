@@ -6,10 +6,12 @@ AnimationRsc* animation_rscs_get(){
     return animation_datas;
 }
 
-AnimationRsc rapp_animation_rsc_get(){
+void animation_rscs_init(){
     AnimationRsc rapp_walk_rsc;
+    rapp_walk_rsc.idle_x = 5;
     rapp_walk_rsc.x_offset = 66;
+    rapp_walk_rsc.y_offset = 86;
     rapp_walk_rsc.frame_amount = 8;
-    return rapp_walk_rsc;
+    animation_datas[0] = rapp_walk_rsc;
 }
 

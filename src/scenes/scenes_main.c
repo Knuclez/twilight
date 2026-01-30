@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "scenes/scenes_main.h"
 #include "scenes/field_scene.h"
-#include "interface/screens_switch.h"
 
 SceneType last_scene_type = -1;
 
@@ -37,7 +36,6 @@ void finalize_scene(Scene *scene){
 //PUBLICS
 void change_scene(Scene *scene, SceneType new_type){
     initialize_scene(scene, new_type);
-    switch_init_screen(new_type);
 }
 
 void start_scenes(Scene *scene){
