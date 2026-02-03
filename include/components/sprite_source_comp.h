@@ -5,6 +5,7 @@
 #include "entities.h"
 
 typedef struct {
+    int txtr_indx;
     int x;
     int y;
     int width;
@@ -24,7 +25,7 @@ extern int sprite_source_to_entity_index[MAX_ENTITIES];
 SpriteSource* sprite_sources_get();
 int sprite_source_count_get();
 int sprite_source_index_get_from_key(EntityKey key);
-void sprite_source_component_add(EntityKey key, int x, int y, int width, int height);
+void sprite_source_component_add(EntityKey key,int txtr_src, int x, int y, int width, int height);
 void sprite_source_component_remove(EntityKey key);
 int sprite_source_component_list_init();
 

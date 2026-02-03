@@ -4,14 +4,14 @@
 
 #include "game_state.h"
 #include "systems/movement.h"
-#include "components/direction_comp.h"
+#include "components/direction_vec_comp.h"
 #include "components/position_comp.h"
 #include "components/entity_bitmasks.h"
 #include "entities.h"
 
 int movement_system_tick(void *v_ents, float delta){
     Position *positions = positions_get();
-    Direction *directions = directions_get();
+    DirectionVec *direction_vecs = direction_vecs_get();
     int pos_count = position_count_get();
     int *ent_bitmasks = entity_bitmasks;
     
@@ -34,33 +34,21 @@ int movement_system_tick(void *v_ents, float delta){
             continue;
         }
         
-        // Obtener dirección
+        // Obtener dirección vector
         EntityKey ent_key = position_get_entity_by_index(pos_idx);
-        int dir_indx = direction_index_get_from_key(ent_key);
-        if (dir_indx < 0) {
-            continue;  // No tiene componente de dirección
+        int dvi = direction_vec_index_get_from_key(ent_key);
+        if (dvi < 0) {
+            continue;  // No tiene componente de direction vec
         }
         
         // ⭐ Acceso directo
         Position *pos = &positions[pos_idx];
-        Direction dir = directions[dir_indx];
+        DirectionVec dvec = direction_vecs[dvi];
         
         if (components_mask & IS_PLAYER_MASK) {
-            int mov = speed * delta;
-            switch(dir) {
-                case N:
-                    pos->y -= mov;
-                    break;
-                case E:
-                    pos->x += mov;
-                    break;
-                case W:
-                    pos->x -= mov;
-                    break;
-                case S:
-                    pos->y += mov;
-                    break;
-            }
+            int mov = (int)(speed * delta);
+            pos->x += mov * dvec.x;
+            pos->y += mov * dvec.y;
         }
     }
     

@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 
 
-#define N_TEXTURES 2
+#define N_TEXTURES 3
 
 void init_texture_modules();
 void terminate_texture_modules();

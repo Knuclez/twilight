@@ -3,7 +3,7 @@
 
 #define MAX_ACTIONS 20
 
-typedef enum {ANIMAL_EAT} ActionType;
+typedef enum {PLAYER_ATTACK} ActionType;
 
 typedef struct {
     ActionType type;

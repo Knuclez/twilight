@@ -58,7 +58,7 @@ SpriteSource sprite_source_get_by_key(EntityKey key) {
     return sprite_sources[idx];
 }
 
-void sprite_source_component_add(EntityKey key, int x, int y, int width, int height) {
+void sprite_source_component_add(EntityKey key, int txtr_src, int x, int y, int width, int height) {
     // Validar entidad
     if (key.index < 0 || key.index >= MAX_ENTITIES) {
         printf("Invalid entity index: %d\n", key.index);
@@ -79,6 +79,7 @@ void sprite_source_component_add(EntityKey key, int x, int y, int width, int hei
     
     // Agregar al final del array denso
     int new_idx = sprite_source_count;
+    sprite_sources[new_idx].txtr_indx = txtr_src;
     sprite_sources[new_idx].x = x;
     sprite_sources[new_idx].y = y;
     sprite_sources[new_idx].width = width;

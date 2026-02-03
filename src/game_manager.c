@@ -6,7 +6,7 @@
 
 //#include "entities.h"
 #include "systems/movement.h"
-
+#include "systems/combat.h"
 
 
 void initialize_game_systems(){
@@ -25,11 +25,10 @@ void process_action_q(int current_time){
     for(int i = 0; i < actn_amt ; i++){
 	Action actn = *(act_list + i);
 	switch(actn.type){
-	    case ANIMAL_EAT:
-		int cow_id = *(actn.data);
-		int tgt_id = *(actn.data + 1);
-		//start_digestion(cow_id);
-		//remove_target_entity(tgt_id);
+	    case PLAYER_ATTACK:
+		int attacker_indx = *(actn.data);
+		int attacker_generation = *(actn.data + 1);
+		combat_process_attack(attacker_indx, attacker_generation);
 		break;
 	}
     }

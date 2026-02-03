@@ -13,8 +13,8 @@
 #include "entities.h"
 #include "components/animation_rsc_index.h"
 #include "components/position_comp.h"
+#include "components/size_comp.h"
 #include "components/sprite_source_comp.h"
-#include "components/texture_indx_comp.h"
 #include "components/direction_comp.h"
 #include "components/entity_bitmasks.h"
 
@@ -52,22 +52,15 @@ void draw_entities(SDL_Renderer *r, float delta){
             continue;
         }
 
-        // Obtener textura - necesitamos EntityKey para esto
+        // ⭐ Obtener sprite_source del nuevo componente
         EntityKey key = position_get_entity_by_index(pos_idx);
-        int txt_idx = texture_get_index_by_key(key);
-        txt = get_texture_by_index(txt_idx);
-        
+        int sprite_src_idx = sprite_source_index_get_from_key(key);
+        SpriteSource sprite_src = sprite_sources[sprite_src_idx];
+
+        txt = get_texture_by_index(sprite_src.txtr_indx);
         if (txt == NULL) {
             continue;
         }
-
-        // ⭐ Obtener sprite_source del nuevo componente
-        int sprite_src_idx = sprite_source_index_get_from_key(key);
-        if (sprite_src_idx < 0) {
-            continue;
-        }
-        
-        SpriteSource sprite_src = sprite_sources[sprite_src_idx];
 
         // Aplicar offset de animación si tiene
         int sprite_shift_x = 0;
@@ -100,8 +93,9 @@ void draw_entities(SDL_Renderer *r, float delta){
 
         // ⭐ Acceso directo a posición del mundo
         Position position = positions[pos_idx];
+	Size size = size_get_by_key(key);
         
-        SDL_Rect output_rect = {position.x, position.y, 130, 160};
+        SDL_Rect output_rect = {position.x, position.y, size.x, size.y};
         SDL_Rect src_rect = {sprite_src.x, sprite_src.y + sprite_shift_y, sprite_src.width, sprite_src.height};
         SDL_RenderCopy(r, txt, &src_rect, &output_rect);
     }

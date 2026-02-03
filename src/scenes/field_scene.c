@@ -6,9 +6,10 @@
 #include "game_state.h"
 
 #include "components/direction_comp.h"
+#include "components/direction_vec_comp.h"
 #include "components/position_comp.h"
+#include "components/size_comp.h"
 #include "components/sprite_source_comp.h"
-#include "components/texture_indx_comp.h"
 #include "components/animation_rsc_index.h"
 
 
@@ -24,11 +25,13 @@ void instance_rapp(){
     EntityKey key = entity_create();
     int bitmask = 0;
 
+    printf("index, %u\n", key.index);
     gs->player_key = key;
     position_component_add(key, 150, 100);
-    sprite_source_component_add(key, 79, 84, 65, 81);  // ⭐ NUEVO: sprite_source
+    size_component_add(key, 130, 160); 
+    sprite_source_component_add(key, 1, 79, 84, 65, 81);  // ⭐ NUEVO: sprite_source
     direction_component_add(key);
-    texture_component_add(key, 1);
+    direction_vec_component_add(key, 0, 0);
     animation_resource_index_component_add(key, 0);
     bitmask |= HAS_ANIMATION_MASK;
     bitmask |= IS_DRAWABLE_MASK;
@@ -37,9 +40,24 @@ void instance_rapp(){
     entity_add_bitmask(key, bitmask);
 }
 
+void instance_kuribo(){
+    EntityKey key = entity_create();
+    int bitmask = 0;
+
+    position_component_add(key, 300, 500);
+    size_component_add(key, 100, 100); 
+    sprite_source_component_add(key, 2, 0, 0, 512, 512);  // ⭐ NUEVO: sprite_source
+    direction_component_add(key);
+    direction_vec_component_add(key, 0, 0);
+    bitmask |= IS_DRAWABLE_MASK;
+    bitmask |= IS_MOVABLE_MASK;
+    entity_add_bitmask(key, bitmask);
+}
+
 
 void field_scene_load_ecs(){
     instance_rapp();
+    instance_kuribo();
 }
 
 
