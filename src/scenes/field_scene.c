@@ -9,6 +9,7 @@
 #include "components/direction_vec_comp.h"
 #include "components/position_comp.h"
 #include "components/size_comp.h"
+#include "components/physical_bounds_comp.h"
 #include "components/sprite_source_comp.h"
 #include "components/animation_rsc_index.h"
 
@@ -29,6 +30,7 @@ void instance_rapp(){
     gs->player_key = key;
     position_component_add(key, 150, 100);
     size_component_add(key, 130, 160); 
+    physical_bounds_component_add(key, 0, 0, 130, 85); 
     sprite_source_component_add(key, 1, 79, 84, 65, 81);  // ⭐ NUEVO: sprite_source
     direction_component_add(key);
     direction_vec_component_add(key, 0, 0);

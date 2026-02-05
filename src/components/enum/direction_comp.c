@@ -18,6 +18,11 @@ Direction* directions_get(){
     return directions;
 }
 
+Direction direction_get_by_key(EntityKey key){
+    int indx = component_index_get(dirIdList, key);
+    return directions[indx];
+}
+
 int direction_index_get_from_key(EntityKey key){
     int indx = component_index_get(dirIdList, key);
     return indx;

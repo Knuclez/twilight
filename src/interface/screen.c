@@ -14,6 +14,7 @@
 #include "components/animation_rsc_index.h"
 #include "components/position_comp.h"
 #include "components/size_comp.h"
+#include "components/physical_bounds_comp.h"
 #include "components/sprite_source_comp.h"
 #include "components/direction_comp.h"
 #include "components/entity_bitmasks.h"
@@ -23,6 +24,50 @@ void screen_entity_clicked(int id_ent){
 }
 
 void screen_text_event(SDL_Event event){
+    return;
+}
+
+void draw_debug(SDL_Renderer *r, int x, int y, int width, int height){
+    SDL_SetRenderDrawColor(r, 255, 255, 255, 255);
+    int center_x = x + (width / 2);
+    int center_y = y + (height / 2);
+
+    SDL_Point contour[5];
+    contour[0].x = x;
+    contour[0].y = y;
+    contour[1].x = x + width;
+    contour[1].y = y;
+    contour[2].x = x + width;
+    contour[2].y = y + height;
+    contour[3].x = x;
+    contour[3].y = y + height;
+    contour[4].x = x;
+    contour[4].y = y;
+    SDL_Rect rect = {center_x, center_y, 10, 10};
+    SDL_RenderFillRect(r, &rect);
+    SDL_RenderDrawLines(r, contour, 5);
+    return;
+}
+
+void draw_debug_red(SDL_Renderer *r, int x, int y, int width, int height){
+    SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
+    int center_x = x + (width / 2);
+    int center_y = y + (height / 2);
+
+    SDL_Point contour[5];
+    contour[0].x = x;
+    contour[0].y = y;
+    contour[1].x = x + width;
+    contour[1].y = y;
+    contour[2].x = x + width;
+    contour[2].y = y + height;
+    contour[3].x = x;
+    contour[3].y = y + height;
+    contour[4].x = x;
+    contour[4].y = y;
+    SDL_Rect rect = {center_x, center_y, 10, 10};
+    SDL_RenderFillRect(r, &rect);
+    SDL_RenderDrawLines(r, contour, 5);
     return;
 }
 
@@ -94,10 +139,13 @@ void draw_entities(SDL_Renderer *r, float delta){
         // ⭐ Acceso directo a posición del mundo
         Position position = positions[pos_idx];
 	Size size = size_get_by_key(key);
+	PhysicalBounds pb= physical_bounds_get_by_key(key);
         
         SDL_Rect output_rect = {position.x, position.y, size.x, size.y};
         SDL_Rect src_rect = {sprite_src.x, sprite_src.y + sprite_shift_y, sprite_src.width, sprite_src.height};
         SDL_RenderCopy(r, txt, &src_rect, &output_rect);
+	draw_debug(r, position.x, position.y, size.x, size.y);
+	draw_debug_red(r,position.x + pb.x,position.y + pb.y,pb.width,pb.height);
     }
 }
 
