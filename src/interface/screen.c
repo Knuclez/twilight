@@ -14,7 +14,6 @@
 #include "components/animation_rsc_index.h"
 #include "components/position_comp.h"
 #include "components/size_comp.h"
-#include "components/physical_bounds_comp.h"
 #include "components/sprite_source_comp.h"
 #include "components/direction_comp.h"
 #include "components/entity_bitmasks.h"
@@ -108,10 +107,9 @@ void draw_entities(SDL_Renderer *r, float delta){
         }
 
         // Aplicar offset de animación si tiene
-        int sprite_shift_x = 0;
+        //int sprite_shift_x = 0;
         int sprite_shift_y = 0;
             if (bitmask & HAS_ANIMATION_MASK) {
-    	    int anim_comp_idx = animation_resource_index_get_from_key(key);
                 int anim_rsc_i = animation_resource_get_rsc_index_from_key(key);
                 if (anim_rsc_i >= 0) {
                     anim_data = animation_rscs[anim_rsc_i];
@@ -139,13 +137,15 @@ void draw_entities(SDL_Renderer *r, float delta){
         // ⭐ Acceso directo a posición del mundo
         Position position = positions[pos_idx];
 	Size size = size_get_by_key(key);
-	PhysicalBounds pb= physical_bounds_get_by_key(key);
         
-        SDL_Rect output_rect = {position.x, position.y, size.x, size.y};
+	int draw_x = position.x - size.x;
+	int draw_y = position.y - size.y;
+	int draw_width = size.x * 2;
+	int draw_height = size.y * 2;
+        SDL_Rect output_rect = {draw_x, draw_y, draw_width, draw_height};
         SDL_Rect src_rect = {sprite_src.x, sprite_src.y + sprite_shift_y, sprite_src.width, sprite_src.height};
         SDL_RenderCopy(r, txt, &src_rect, &output_rect);
-	draw_debug(r, position.x, position.y, size.x, size.y);
-	draw_debug_red(r,position.x + pb.x,position.y + pb.y,pb.width,pb.height);
+	draw_debug(r,draw_x, draw_y, draw_width, draw_height);
     }
 }
 

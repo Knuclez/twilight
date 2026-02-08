@@ -29,7 +29,7 @@ void instance_rapp(){
     printf("index, %u\n", key.index);
     gs->player_key = key;
     position_component_add(key, 150, 100);
-    size_component_add(key, 130, 160); 
+    size_component_add(key, 65, 80); 
     physical_bounds_component_add(key, 0, 0, 130, 85); 
     sprite_source_component_add(key, 1, 79, 84, 65, 81);  // ⭐ NUEVO: sprite_source
     direction_component_add(key);
@@ -47,7 +47,7 @@ void instance_kuribo(){
     int bitmask = 0;
 
     position_component_add(key, 300, 500);
-    size_component_add(key, 100, 100); 
+    size_component_add(key, 50, 50); 
     sprite_source_component_add(key, 2, 0, 0, 512, 512);  // ⭐ NUEVO: sprite_source
     direction_component_add(key);
     direction_vec_component_add(key, 0, 0);

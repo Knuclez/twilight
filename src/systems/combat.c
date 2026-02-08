@@ -2,6 +2,7 @@
 
 #include "systems/combat.h"
 
+#include "entities.h"
 #include "components/direction_vec_comp.h"
 #include "components/position_comp.h"
 #include "components/size_comp.h"
@@ -24,14 +25,13 @@ void combat_process_attack(int attacker_indx, int attacker_generation){
     int attacker_center_y = att_pos.y + pb.y + (pb.height / 2);
     int offset_x = att_dir.x * radio;
     int offset_y = att_dir.y * radio;
-    printf("offset x %u\n", offset_x);
-    printf("offset y %u\n", offset_y);
 
-    position_component_add(key, attacker_center_x + offset_x - 32, attacker_center_y + offset_y);
+    position_component_add(key, att_pos.x + offset_x, att_pos.y + offset_y);
     size_component_add(key, 40, 40);
     sprite_source_component_add(key, 0, 198, 66, 62, 64);  // ⭐ NUEVO: sprite_source
     direction_vec_component_add(key, 0, 0);
     bitmask |= IS_DRAWABLE_MASK;
+    bitmask |= IS_COMBAT_ENT_MASK;
     entity_add_bitmask(key, bitmask);
 }
 
