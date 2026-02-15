@@ -5,13 +5,7 @@
 //#include "entities.h"
 #include "game_state.h"
 
-#include "components/direction_comp.h"
-#include "components/direction_vec_comp.h"
-#include "components/position_comp.h"
-#include "components/size_comp.h"
-#include "components/physical_bounds_comp.h"
-#include "components/sprite_source_comp.h"
-#include "components/animation_rsc_index.h"
+#include "entities.h"  /* unified entity data and helpers */
 
 
 void test_console(){
@@ -28,17 +22,19 @@ void instance_rapp(){
 
     printf("index, %u\n", key.index);
     gs->player_key = key;
-    position_component_add(key, 150, 100);
-    size_component_add(key, 65, 80); 
-    physical_bounds_component_add(key, 0, 0, 130, 85); 
-    sprite_source_component_add(key, 1, 79, 84, 65, 81);  // ⭐ NUEVO: sprite_source
-    direction_component_add(key);
-    direction_vec_component_add(key, 0, 0);
-    animation_resource_index_component_add(key, 0);
+    entity_set_position(key, 150, 100);
+    entity_set_size(key, 65, 80);
+    entity_set_physical_bounds(key, 0, 0, 130, 85);
+    entity_set_sprite_source(key, 1, 79, 84, 65, 81);
+    entity_set_direction(key, IDLE);
+    entity_set_direction_vec(key, 0, 0);
+    entity_set_animation(key, 0);
+
     bitmask |= HAS_ANIMATION_MASK;
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= IS_MOVABLE_MASK;
     bitmask |= IS_PLAYER_MASK;
+    bitmask |= HAS_COLIDER_MASK;
     entity_add_bitmask(key, bitmask);
 }
 
@@ -46,11 +42,12 @@ void instance_kuribo(){
     EntityKey key = entity_create();
     int bitmask = 0;
 
-    position_component_add(key, 300, 500);
-    size_component_add(key, 50, 50); 
-    sprite_source_component_add(key, 2, 0, 0, 512, 512);  // ⭐ NUEVO: sprite_source
-    direction_component_add(key);
-    direction_vec_component_add(key, 0, 0);
+    entity_set_position(key, 300, 500);
+    entity_set_size(key, 50, 50);
+    entity_set_physical_bounds(key, 0, 0, 100, 100);
+    entity_set_sprite_source(key, 2, 0, 0, 512, 512);
+    entity_set_direction(key, IDLE);
+    entity_set_direction_vec(key, 0, 0);
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= IS_MOVABLE_MASK;
     entity_add_bitmask(key, bitmask);

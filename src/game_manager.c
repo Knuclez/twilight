@@ -3,11 +3,12 @@
 #include "game_manager.h"
 #include "game_state.h"
 #include "action_q.h"
+#include "interface/animations_rsc.h"
 
 //#include "entities.h"
 #include "systems/movement.h"
 #include "systems/combat.h"
-#include "components/lifetime_comp.h"
+#include "entities.h"  /* lifetime handled inside Entity */
 
 int last_second = 0;
 
@@ -37,34 +38,69 @@ void process_action_q(int current_time){
     clean_action_queue();
 }
 
-void tick_lifetimes(){
-    int *lifetimes = lifetimes_get(); 
-    int *lifetime_key_indexes = lifetimes_key_indexes_get();
-    int *lifetime_key_generationes = lifetimes_key_generations_get();
-    int lifetimes_amount = lifetimes_amount_get();
+void tick_lifetimes() {
+    for (int i = 0; i < entities_max_index(); i++) {
+        Entity *e = &entities[i];
+        if (e->key.index < 0) continue;
+        if (e->lifetime > 0) {
+            e->lifetime--;
+	    printf("lifetime %u\n", e->lifetime); 
+            if (e->lifetime <= 0) {
+                /* mark as dead by bumping generation and clearing bitmask */
+                e->key.generation++;
+                e->bitmask = 0;
+                e->key.index = -1;
+            }
+        }
+    }
+}
 
-    EntityKey new_key;
-    for(int i = 0; i < lifetimes_amount; i++){
-	lifetimes[i]--;
-	if(lifetimes[i] <= 0){
-	    new_key.index = lifetime_key_indexes[i];
-	    new_key.generation = lifetime_key_generationes[i]; 
-	    printf("hay q remover\n");
-	    //remove_entity(new_key);
-	    new_key.index = 0;
-	    new_key.generation = 0; 
+void tick_animations(float delta_time, float frame_rate) {
+    for (int i = 0; i < entities_max_index(); i++) {
+        Entity *e = &entities[i];
+        if (e->key.index < 0) continue;
+        if ((e->bitmask & HAS_ANIMATION_MASK) &&
+            e->animation.resource_index >= 0) {
+            e->animation.frame_timer += delta_time;
+            float frame_length = 1.0f / frame_rate;
+            if (e->animation.frame_timer >= frame_length) {
+                e->animation.frame_timer -= frame_length;
+                e->animation.current_frame++;
+                
+                /* wrap-around: need to get the frame count from animation resource */
+                AnimationRsc* anim_rscs = animation_rscs_get();
+                if (e->animation.resource_index < 10) { /* assuming max 10 resources */
+                    int frame_count = anim_rscs[e->animation.resource_index].frame_amount;
+                    if (frame_count > 0 && e->animation.current_frame >= frame_count) {
+                        e->animation.current_frame = 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void collisions_process_frame(void *v_ents){
+    Entity *ents = (Entity*) v_ents;
+    for (int i = 0; i < entities_max_index(); i++) {
+        Entity *e = &entities[i];
+        if (e->key.index <= 0) continue;
+        if (e->bitmask & HAS_COLIDER_MASK) {
+		printf("%u has colider\n", e->key.index);
 	}
+    } 
     return;
-   }
 }
 
 void update(int current_time, float delta){
-    EntityKey *ents = entities_get();
+    Entity *ents = entities_get();
     process_action_q(current_time);
-    movement_system_tick((void*)ents, delta);
+    movements_process_frame((void*)ents, delta);
+    collisions_process_frame((void*)ents);
+    tick_animations(delta, 30.0f);
     if (current_time > last_second + 1000){
-	tick_lifetimes();
-	last_second = current_time;
+        tick_lifetimes();
+        last_second = current_time;
     }
     return;
 }

@@ -10,20 +10,14 @@
 #include "game_state.h"
 #include "systems/movement.h"
 
-#include "entities.h"
-#include "components/animation_rsc_index.h"
-#include "components/position_comp.h"
-#include "components/size_comp.h"
-#include "components/sprite_source_comp.h"
-#include "components/direction_comp.h"
-#include "components/entity_bitmasks.h"
+#include "entities.h"  /* unified entity storage */
 
 void screen_entity_clicked(int id_ent){
-    return;
+    (void)id_ent;
 }
 
 void screen_text_event(SDL_Event event){
-    return;
+    (void)event;
 }
 
 void draw_debug(SDL_Renderer *r, int x, int y, int width, int height){
@@ -45,7 +39,6 @@ void draw_debug(SDL_Renderer *r, int x, int y, int width, int height){
     SDL_Rect rect = {center_x, center_y, 10, 10};
     SDL_RenderFillRect(r, &rect);
     SDL_RenderDrawLines(r, contour, 5);
-    return;
 }
 
 void draw_debug_red(SDL_Renderer *r, int x, int y, int width, int height){
@@ -67,92 +60,62 @@ void draw_debug_red(SDL_Renderer *r, int x, int y, int width, int height){
     SDL_Rect rect = {center_x, center_y, 10, 10};
     SDL_RenderFillRect(r, &rect);
     SDL_RenderDrawLines(r, contour, 5);
-    return;
 }
 
 void draw_entities(SDL_Renderer *r, float delta){
-    Position *positions = positions_get();
-    SpriteSource *sprite_sources = sprite_sources_get();
-    int pos_count = position_count_get();
-    AnimationRsc *animation_rscs = animation_rscs_get();
-    int *ent_bitmasks = entity_bitmasks;
-
-    AnimationRsc anim_data;
     SDL_Texture *txt;
-    
-    // ⭐ ITERACION EFICIENTE: Solo sobre entidades con posición
-    for (int pos_idx = 0; pos_idx < pos_count; pos_idx++) {
-        
-        // Obtener índice de entidad desde la posición
-        int entity_idx = position_to_entity_index_get(pos_idx);
-        if (entity_idx < 0) {
-            continue;
-        }
-        
-        // ⭐ Acceso O(1) al bitmask desde array global
-        int bitmask = ent_bitmasks[entity_idx];
+    Entity *ents = entities_get();
+    int max = entities_max_index();
 
-        if (!(bitmask & IS_DRAWABLE_MASK)) {
-            continue;
-        }
+    /* get animation resources for sprite positioning */
+    AnimationRsc* anim_rscs = animation_rscs_get();
 
-        // ⭐ Obtener sprite_source del nuevo componente
-        EntityKey key = position_get_entity_by_index(pos_idx);
-        int sprite_src_idx = sprite_source_index_get_from_key(key);
-        SpriteSource sprite_src = sprite_sources[sprite_src_idx];
+    for (int i = 0; i < max; i++) {
+        Entity *e = &ents[i];
+        if (e->key.index < 0) continue;
+        if (!(e->bitmask & IS_DRAWABLE_MASK)) continue;
 
+        SpriteSource sprite_src = e->sprite_source;
         txt = get_texture_by_index(sprite_src.txtr_indx);
-        if (txt == NULL) {
-            continue;
-        }
+        if (!txt) continue;
 
-        // Aplicar offset de animación si tiene
-        //int sprite_shift_x = 0;
         int sprite_shift_y = 0;
-            if (bitmask & HAS_ANIMATION_MASK) {
-                int anim_rsc_i = animation_resource_get_rsc_index_from_key(key);
-                if (anim_rsc_i >= 0) {
-                    anim_data = animation_rscs[anim_rsc_i];
-
-                    // ⭐ Obtener frame actual y calcular X del sprite
-                    int current_frame = animation_state_get_frame(key);
-                    sprite_src.x = anim_data.idle_x + 8 + ((current_frame + 1) * anim_data.x_offset);
-
-                    // Obtener dirección para calcular offset Y
-                    Direction *directions = directions_get();
-                    int dir_idx = direction_index_get_from_key(key);
-                    if (dir_idx >= 0) {
-                        Direction dir = directions[dir_idx];
-                        if (dir == 0){
-                            sprite_src.x = anim_data.idle_x;
-                        } else {
-                            sprite_shift_y = anim_data.y_offset * (dir - 1);
-                        }
-                    }
+        if (e->bitmask & HAS_ANIMATION_MASK) {
+            int anim_idx = e->animation.resource_index;
+            if (anim_idx >= 0 && anim_idx < 10) {
+                AnimationRsc anim_data = anim_rscs[anim_idx];
+                int current_frame = e->animation.current_frame;
+                
+                /* calculate sprite position based on current frame */
+                if (e->direction == IDLE) {
+                    sprite_src.x = anim_data.idle_x;
+                } else {
+		    sprite_src.x = anim_data.idle_x + 8 + ((current_frame + 1) * anim_data.x_offset);
+                    //sprite_src.x = anim_data.idle_x + (current_frame * anim_data.x_offset);
+                    /* direction-based Y offset */
+                    sprite_shift_y = anim_data.y_offset * (e->direction - 1);
                 }
-    	    animation_state_update(key, delta, 10);
-
+            }
         }
 
-        // ⭐ Acceso directo a posición del mundo
-        Position position = positions[pos_idx];
-	Size size = size_get_by_key(key);
-        
-	int draw_x = position.x - size.x;
-	int draw_y = position.y - size.y;
-	int draw_width = size.x * 2;
-	int draw_height = size.y * 2;
+	PhysicalBounds pb = e->physical_bounds;
+
+        int draw_x = e->position.x - e->size.x;
+        int draw_y = e->position.y - e->size.y;
+        int draw_width = e->size.x * 2;
+        int draw_height = e->size.y * 2;
         SDL_Rect output_rect = {draw_x, draw_y, draw_width, draw_height};
-        SDL_Rect src_rect = {sprite_src.x, sprite_src.y + sprite_shift_y, sprite_src.width, sprite_src.height};
+        SDL_Rect src_rect = {sprite_src.x, sprite_src.y + sprite_shift_y,
+                             sprite_src.width, sprite_src.height};
         SDL_RenderCopy(r, txt, &src_rect, &output_rect);
-	draw_debug(r,draw_x, draw_y, draw_width, draw_height);
+        //draw_debug(r, draw_x, draw_y, draw_width, draw_height);
+	draw_debug_red(r, draw_x + pb.x, draw_y + pb.y, pb.width, pb.height);
     }
 }
 
 void screen_present(SDL_Renderer *renderer, float delta){
     SDL_SetRenderDrawColor(renderer, 0, 210, 0, 255);
     SDL_RenderClear(renderer);
-
     draw_entities(renderer, delta);
     SDL_RenderPresent(renderer);
 }

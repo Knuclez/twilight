@@ -2,6 +2,5 @@
 #define MOVEMENT_H
 
 
-void no_hinche_los_huevo();
-int movement_system_tick(void *key, float delta);
+int movements_process_frame(void *key, float delta);
 #endif
