@@ -7,6 +7,7 @@
 #include "components/direction_comp.h"
 #include "components/direction_vec_comp.h"
 #include "components/sprite_source_comp.h"
+#include "components/lifetime_comp.h"
 #include "components/entity_bitmasks.h"
 
 void init_components(){
@@ -18,4 +19,5 @@ void init_components(){
     direction_component_list_init();
     direction_vec_component_list_init();
     animation_rsc_index_component_list_init();
+    lifetime_component_list_init();
 } 

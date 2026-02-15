@@ -8,6 +8,7 @@
 #include "components/size_comp.h"
 #include "components/physical_bounds_comp.h"
 #include "components/sprite_source_comp.h"
+#include "components/lifetime_comp.h"
 
 void combat_process_attack(int attacker_indx, int attacker_generation){
     EntityKey attacker_key;
@@ -28,6 +29,8 @@ void combat_process_attack(int attacker_indx, int attacker_generation){
 
     position_component_add(key, att_pos.x + offset_x, att_pos.y + offset_y);
     size_component_add(key, 40, 40);
+    physical_bounds_component_add(key, 0, 0, 40, 40); 
+    lifetime_component_add(key, 5);
     sprite_source_component_add(key, 0, 198, 66, 62, 64);  // ⭐ NUEVO: sprite_source
     direction_vec_component_add(key, 0, 0);
     bitmask |= IS_DRAWABLE_MASK;

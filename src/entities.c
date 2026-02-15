@@ -15,9 +15,9 @@ int entities_max_index(){
 
 EntityKey entity_create(){
     EntityKey new;
-    new.index = -1;
-    new.generation = -1;
-    for(int i = 0; i < 200; i++){
+    new.index = 0;
+    new.generation = 0;
+    for(int i = 1; i < 200; i++){
 	if(entities[i].index == -1){
 	    new.index = i;
 	    new.generation = entities[i].generation + 1;
