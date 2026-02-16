@@ -2,9 +2,8 @@
 
 #include "systems/combat.h"
 #include "entities.h"  /* unified storage and helpers */
+#include "systems/physics.h"
 
-/* old component headers removed; all component data accessed through
-   the Entity struct or helper functions provided by entities.c */
 
 void combat_process_attack(int attacker_indx, int attacker_generation){
     EntityKey attacker_key;
@@ -25,7 +24,7 @@ void combat_process_attack(int attacker_indx, int attacker_generation){
     /* configure the newly created entity directly */
     entity_set_position(key, att_pos.x + offset_x, att_pos.y + offset_y);
     entity_set_size(key, 40, 40);
-    entity_set_physical_bounds(key, 0, 24, 80, 30);
+    entity_set_physical_bounds(key, 0, 24, 40, 15);
     entity_set_lifetime(key, 1);
     entity_set_sprite_source(key, 0, 198, 66, 62, 64);
     entity_set_direction_vec(key, 0, 0);
@@ -33,6 +32,7 @@ void combat_process_attack(int attacker_indx, int attacker_generation){
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= IS_COMBAT_ENT_MASK;
     entity_add_bitmask(key, bitmask);
+    individual_collider_check_collisions(key);
 }
 
 void tick_combat(){

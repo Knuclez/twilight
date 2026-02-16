@@ -80,23 +80,11 @@ void tick_animations(float delta_time, float frame_rate) {
     }
 }
 
-void collisions_process_frame(void *v_ents){
-    Entity *ents = (Entity*) v_ents;
-    for (int i = 0; i < entities_max_index(); i++) {
-        Entity *e = &entities[i];
-        if (e->key.index <= 0) continue;
-        if (e->bitmask & HAS_COLIDER_MASK) {
-		printf("%u has colider\n", e->key.index);
-	}
-    } 
-    return;
-}
 
 void update(int current_time, float delta){
     Entity *ents = entities_get();
     process_action_q(current_time);
     movements_process_frame((void*)ents, delta);
-    collisions_process_frame((void*)ents);
     tick_animations(delta, 30.0f);
     if (current_time > last_second + 1000){
         tick_lifetimes();

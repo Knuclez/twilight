@@ -109,7 +109,7 @@ void draw_entities(SDL_Renderer *r, float delta){
                              sprite_src.width, sprite_src.height};
         SDL_RenderCopy(r, txt, &src_rect, &output_rect);
         //draw_debug(r, draw_x, draw_y, draw_width, draw_height);
-	draw_debug_red(r, draw_x + pb.x, draw_y + pb.y, pb.width, pb.height);
+	draw_debug_red(r, draw_x + pb.x, draw_y + pb.y, pb.width * 2, pb.height * 2);
     }
 }
 
