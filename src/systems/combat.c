@@ -5,11 +5,7 @@
 #include "systems/physics.h"
 
 
-void combat_process_attack(int attacker_indx, int attacker_generation){
-    EntityKey attacker_key;
-    attacker_key.index = attacker_indx;
-    attacker_key.generation = attacker_generation;
-
+void combat_process_attack(EntityKey attacker_key){
     EntityKey key = entity_create();
     int bitmask = 0;
 

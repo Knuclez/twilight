@@ -24,10 +24,8 @@ void queue_action(Action action){
 };
 
 void clean_action_queue(){
-    for (int i = 0; i < action_q.actions_amount; i++){
-	int *to_free = action_q.queue[i].data;
-	free(to_free);
-	memset(&(action_q.queue[i]), 0 , sizeof(Action));
-    }
+    // No dynamic memory to free anymore with the union approach
+    // Just reset the counter and optionally zero out memory for safety
+    memset(action_q.queue, 0, sizeof(action_q.queue));
     action_q.actions_amount = 0;
 };

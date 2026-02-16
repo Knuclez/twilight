@@ -44,12 +44,12 @@ void individual_collider_check_collisions(EntityKey ent){
 	    }
 	    bottom = to_check.position.y + to_check.physical_bounds.height + to_check.physical_bounds.y;
 	    t = e.position.y - e.physical_bounds.height + to_check.physical_bounds.y;
-	    printf("%u bottom from spawn\n", bottom);
-	    printf("%u top from checked ent", t);
-	    printf("%u \n", e.key.index);
 	    if(bottom < t){
 		continue;
 	    }
+	    printf("%u bottom from spawn\n", bottom);
+	    printf("%u top from checked ent", t);
+	    printf("%u \n", e.key.index);
 	}
     } 
     return;

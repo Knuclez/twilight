@@ -28,12 +28,10 @@ void event_key_down_handle(SDL_Event event){
         p->direction_vec.y = 1;
     }
     if(event.key.keysym.sym == SDLK_j){
-	Action new;
-	new.type = PLAYER_ATTACK;
-	new.data = malloc(sizeof(int) * 2);
-	*(new.data) = player.index;
-	*(new.data + 1) = player.generation;
-	queue_action(new);
+        Action new_act = {0};
+        new_act.type = PLAYER_ATTACK;
+        new_act.data.attacker_key = player;
+        queue_action(new_act);
     }
     return;
 } 

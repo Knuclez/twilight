@@ -1,13 +1,28 @@
 #ifndef ACTIONQ_H
 #define ACTIONQ_H
 
-#define MAX_ACTIONS 20
+#include "entities.h"
 
-typedef enum {PLAYER_ATTACK} ActionType;
+#define MAX_ACTIONS 64
+
+typedef enum {
+    PLAYER_ATTACK,
+    COLLISION
+} ActionType;
+
+typedef struct {
+    EntityKey attacker;
+    EntityKey victim;
+} CollisionEvent;
+
+typedef union {
+    CollisionEvent collision;
+    EntityKey attacker_key;
+} ActionData;
 
 typedef struct {
     ActionType type;
-    int *data;
+    ActionData data;
 } Action;
 
 typedef struct {

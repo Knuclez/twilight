@@ -26,12 +26,15 @@ void process_action_q(int current_time){
     int actn_amt = get_actions_amount();
     Action *act_list = get_actions_queue();
     for(int i = 0; i < actn_amt ; i++){
-	Action actn = *(act_list + i);
+	Action actn = act_list[i];
 	switch(actn.type){
 	    case PLAYER_ATTACK:
-		int attacker_indx = *(actn.data);
-		int attacker_generation = *(actn.data + 1);
-		combat_process_attack(attacker_indx, attacker_generation);
+		// Accedemos directamente a la struct en la union
+		combat_process_attack(actn.data.attacker_key);
+		break;
+	    case COLLISION:
+		// Aqui podras manejar la colision en el futuro
+		// printf("Collision: %d hit %d\n", actn.data.collision.attacker.index, actn.data.collision.victim.index);
 		break;
 	}
     }
