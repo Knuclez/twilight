@@ -1,10 +1,13 @@
 #include <stdio.h>
-
 #include "systems/physics.h"
+
+#include "game_state.h"
 #include "entities.h"
+#include "event_queues/collision_queue.h"
 
 
 void individual_collider_check_collisions(EntityKey ent){
+    GameState *gs = get_game_state_p();
     Entity *ents = entities;
     Entity to_check = ents[ent.index];
     Entity e;
@@ -47,9 +50,10 @@ void individual_collider_check_collisions(EntityKey ent){
 	    if(bottom < t){
 		continue;
 	    }
-	    printf("%u bottom from spawn\n", bottom);
-	    printf("%u top from checked ent", t);
-	    printf("%u \n", e.key.index);
+	    
+	    if(to_check.bitmask & IS_DAMAGE_MASK){
+		collision_queue_add(&gs->collision_queue, ent, e.key);
+	    }
 	}
     } 
     return;

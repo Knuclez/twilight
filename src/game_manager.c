@@ -32,9 +32,9 @@ void process_action_q(int current_time){
 		// Accedemos directamente a la struct en la union
 		combat_process_attack(actn.data.attacker_key);
 		break;
-	    case COLLISION:
+	    case DAMAGE_COLLISION:
 		// Aqui podras manejar la colision en el futuro
-		// printf("Collision: %d hit %d\n", actn.data.collision.attacker.index, actn.data.collision.victim.index);
+		printf("Collision: %d hit %d\n", actn.data.collision.attacker.index, actn.data.collision.victim.index);
 		break;
 	}
     }
@@ -47,7 +47,6 @@ void tick_lifetimes() {
         if (e->key.index < 0) continue;
         if (e->lifetime > 0) {
             e->lifetime--;
-	    printf("lifetime %u\n", e->lifetime); 
             if (e->lifetime <= 0) {
                 /* mark as dead by bumping generation and clearing bitmask */
                 e->key.generation++;
@@ -84,11 +83,18 @@ void tick_animations(float delta_time, float frame_rate) {
 }
 
 
+void clean_queues(GameState *gs){
+    collision_queue_clear(&gs->collision_queue);
+}
+
 void update(int current_time, float delta){
+    GameState *gs = get_game_state_p();
     Entity *ents = entities_get();
     process_action_q(current_time);
     movements_process_frame((void*)ents, delta);
+    combat_system_tick(&gs->collision_queue);
     tick_animations(delta, 30.0f);
+    clean_queues(gs);
     if (current_time > last_second + 1000){
         tick_lifetimes();
         last_second = current_time;

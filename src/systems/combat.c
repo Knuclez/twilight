@@ -1,7 +1,8 @@
 #include <stdio.h> 
-
 #include "systems/combat.h"
+
 #include "entities.h"  /* unified storage and helpers */
+#include "event_queues/collision_queue.h"
 #include "systems/physics.h"
 
 
@@ -26,10 +27,14 @@ void combat_process_attack(EntityKey attacker_key){
     entity_set_direction_vec(key, 0, 0);
 
     bitmask |= IS_DRAWABLE_MASK;
-    bitmask |= IS_COMBAT_ENT_MASK;
+    bitmask |= IS_DAMAGE_MASK;
     entity_add_bitmask(key, bitmask);
     individual_collider_check_collisions(key);
 }
 
-void tick_combat(){
+void combat_system_tick(CollisionQueue *collision_q){
+    int count = collision_queue_get_count(collision_q);
+
+    for(int i = 0; i < count; i++){
+    }
 }

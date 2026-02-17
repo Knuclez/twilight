@@ -3,6 +3,7 @@
 GameState game_state;
 
 int initialize_game_state(){
+    collision_queue_init(&game_state.collision_queue);
     start_scenes(&game_state.current_scene);
     return 1;
 }

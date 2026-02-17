@@ -7,7 +7,7 @@
 
 typedef enum {
     PLAYER_ATTACK,
-    COLLISION
+    DAMAGE_COLLISION 
 } ActionType;
 
 typedef struct {

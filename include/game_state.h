@@ -3,10 +3,12 @@
 
 #include "entities.h"
 #include "scenes/scenes_main.h"
+#include "event_queues/collision_queue.h"
 
 typedef struct {
     Scene current_scene;
     EntityKey player_key;
+    CollisionQueue collision_queue;
 } GameState;
 
 int initialize_game_state();
