@@ -1,3 +1,4 @@
+#include <stdio.h> 
 #include <string.h>
 #include "event_queues/collision_queue.h"
 
@@ -33,7 +34,7 @@ Collision* collision_queue_get_list(CollisionQueue* queue) {
 }
 
 int collision_queue_get_count(CollisionQueue* queue) {
-    if (queue == NULL) return -1;
+    if (queue == NULL) return 0;
     
     return queue->next_slot;
 }

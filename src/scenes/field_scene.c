@@ -44,6 +44,7 @@ void instance_kuribo(){
 
     entity_set_position(key, 300, 500);
     entity_set_size(key, 50, 50);
+    entity_set_health(key, 40);
     entity_set_physical_bounds(key, 0, 0, 50, 50);
     entity_set_sprite_source(key, 2, 0, 0, 512, 512);
     entity_set_direction(key, IDLE);

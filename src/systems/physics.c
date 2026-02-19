@@ -8,7 +8,7 @@
 
 void individual_collider_check_collisions(EntityKey ent){
     GameState *gs = get_game_state_p();
-    Entity *ents = entities;
+    Entity *ents = entities_get();
     Entity to_check = ents[ent.index];
     Entity e;
 

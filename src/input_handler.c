@@ -3,13 +3,11 @@
 #include "entities.h"
 #include "action_q.h"
 
-#include "entities.h"  /* access entity fields directly */
-
 int moving_count = 0;
 
 void event_key_down_handle(SDL_Event event){
     EntityKey player = (get_game_state_p())->player_key;
-    Entity *p = &entities[player.index];
+    Entity *p = entities_get() + player.index;
 
     if(event.key.keysym.sym == SDLK_w){
         p->direction = N;
@@ -39,7 +37,7 @@ void event_key_down_handle(SDL_Event event){
 
 void event_key_up_handle(SDL_Event event){
     EntityKey player = (get_game_state_p())->player_key;
-    Entity *p = &entities[player.index];
+    Entity *p = entities_get() + player.index;
 
     if(event.key.keysym.sym == SDLK_w){
         p->direction = IDLE;

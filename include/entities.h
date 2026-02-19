@@ -66,13 +66,12 @@ typedef struct Entity {
     PhysicalBounds physical_bounds;
     SpriteSource sprite_source;
     int lifetime;
+    int damage;
+    int health;
     AnimationState animation;
     Direction direction;
 } Entity;
 
-
-/* storage array */
-extern Entity entities[MAX_ENTITIES];
 
 /* core API */
 Entity* entities_get();              /* pointer to the storage array */
@@ -80,6 +79,7 @@ int entities_max_index();            /* highest slot ever used */
 void entities_list_init();           /* reset all slots to empty */
 EntityKey entity_create();           /* allocate a new entity */
 void entity_add_bitmask(EntityKey key, int n_bitmask);
+void entity_deactivate(Entity *entities, EntityKey key);
 
 /* component helpers (formerly separate modules) */
 /* setters/getters operate directly on the unified Entity struct */
@@ -103,6 +103,12 @@ Direction entity_get_direction(EntityKey key);
 
 void entity_set_lifetime(EntityKey key, int life);
 int entity_get_lifetime(EntityKey key);
+
+void entity_set_damage(EntityKey key, int damage);
+int entity_get_damage(EntityKey key);
+
+void entity_set_health(EntityKey key, int health);
+int entity_get_health(EntityKey key);
 
 void entity_set_animation(EntityKey key, int resource_index);
 AnimationState entity_get_animation(EntityKey key);

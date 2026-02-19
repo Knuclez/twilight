@@ -9,6 +9,8 @@ typedef struct {
     Scene current_scene;
     EntityKey player_key;
     CollisionQueue collision_queue;
+    Entity entities[MAX_ENTITIES];
+    int max_index;
 } GameState;
 
 int initialize_game_state();

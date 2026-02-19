@@ -2,7 +2,7 @@
 #include "systems/combat.h"
 
 #include "entities.h"  /* unified storage and helpers */
-#include "event_queues/collision_queue.h"
+#include "game_state.h"
 #include "systems/physics.h"
 
 
@@ -23,6 +23,7 @@ void combat_process_attack(EntityKey attacker_key){
     entity_set_size(key, 40, 40);
     entity_set_physical_bounds(key, 0, 24, 40, 15);
     entity_set_lifetime(key, 1);
+    entity_set_damage(key, 10);
     entity_set_sprite_source(key, 0, 198, 66, 62, 64);
     entity_set_direction_vec(key, 0, 0);
 
@@ -32,9 +33,26 @@ void combat_process_attack(EntityKey attacker_key){
     individual_collider_check_collisions(key);
 }
 
-void combat_system_tick(CollisionQueue *collision_q){
-    int count = collision_queue_get_count(collision_q);
+void combat_system_tick(GameState *gs){
+    CollisionQueue collision_q = gs->collision_queue;
+    int count = collision_queue_get_count(&collision_q);
+    EntityKey attacker_key;
+    EntityKey attacked_key;
 
     for(int i = 0; i < count; i++){
+	attacker_key = collision_q.collisions[i].entity1;
+	attacked_key = collision_q.collisions[i].entity2;
+	int dc = entity_get_damage(attacker_key);
+	int hc = entity_get_health(attacked_key);
+	printf("%u damage\n", dc);
+	printf("%u health\n", hc);
+
+	int new_health = hc - dc;
+	entity_set_health(attacked_key, new_health);
+	if (new_health <= 0){
+	    entity_deactivate(gs->entities, attacked_key);
+	}
+
+		
     }
 }
