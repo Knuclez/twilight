@@ -5,6 +5,7 @@ GameState game_state = {0};
 int initialize_game_state(){
     entities_list_init();
     collision_queue_init(&game_state.collision_queue);
+    effect_queue_init(&game_state.effect_queue);
     start_scenes(&game_state.current_scene);
     return 1;
 }

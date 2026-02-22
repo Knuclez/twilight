@@ -15,6 +15,7 @@
 #define BUCKET_SIZE 10
 #define MAX_ENTITIES (LIST_SIZE * BUCKET_SIZE)
 
+//TRAITS
 /* component bitmask constants (same values as before) */
 #define IS_DRAWABLE_MASK    	0b00000000000000000000000000000010
 #define IS_MOVABLE_MASK     	0b00000000000000000000000000000100
@@ -22,6 +23,9 @@
 #define HAS_ANIMATION_MASK 	0b00000000000000000000000000010000
 #define IS_DAMAGE_MASK		0b00000000000000000000000000100000
 #define HAS_COLIDER_MASK	0b00000000000000000000000001000000
+
+//TYPES
+typedef enum {NCC, MOB} CombatType;  //NCC = no combatable character;
 
 /* basic component types previously defined in their own headers */
 typedef struct { int x; int y; } Position;
@@ -59,6 +63,7 @@ typedef struct Entity {
     EntityKey key;
     int bitmask;
 
+    CombatType combat_type;
     /* components */
     Position position;
     Size size;
@@ -83,6 +88,9 @@ void entity_deactivate(Entity *entities, EntityKey key);
 
 /* component helpers (formerly separate modules) */
 /* setters/getters operate directly on the unified Entity struct */
+void entity_set_combat_type(EntityKey key, CombatType combat_type);
+CombatType entity_get_combat_type(EntityKey key);
+
 void entity_set_position(EntityKey key, int x, int y);
 Position entity_get_position(EntityKey key);
 

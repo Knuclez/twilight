@@ -42,17 +42,23 @@ void combat_system_tick(GameState *gs){
     for(int i = 0; i < count; i++){
 	attacker_key = collision_q.collisions[i].entity1;
 	attacked_key = collision_q.collisions[i].entity2;
+	if(entity_get_combat_type(attacked_key) != MOB){continue;}
 	int dc = entity_get_damage(attacker_key);
 	int hc = entity_get_health(attacked_key);
-	printf("%u damage\n", dc);
-	printf("%u health\n", hc);
 
 	int new_health = hc - dc;
 	entity_set_health(attacked_key, new_health);
+	Effect new;
+	new.type = TREMBLE;
+	new.affected_entity_index = attacked_key.index;
+	new.affected_entity_generation = attacked_key.generation;
+	new.max_lifetime = 100;
+	new.current_lifetime = 100;
+	effect_queue_add(&gs->effect_queue, new);
 	if (new_health <= 0){
 	    entity_deactivate(gs->entities, attacked_key);
 	}
-
-		
+	printf("%u health\n", new_health);
     }
+    return;
 }

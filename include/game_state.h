@@ -4,11 +4,13 @@
 #include "entities.h"
 #include "scenes/scenes_main.h"
 #include "event_queues/collision_queue.h"
+#include "event_queues/effect_queue.h"
 
 typedef struct {
     Scene current_scene;
     EntityKey player_key;
     CollisionQueue collision_queue;
+    EffectQueue effect_queue;
     Entity entities[MAX_ENTITIES];
     int max_index;
 } GameState;

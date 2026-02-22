@@ -82,6 +82,17 @@ static Entity* ep(EntityKey key) {
     return &get_game_state_p()->entities[key.index];
 }
 
+
+void entity_set_combat_type(EntityKey key, CombatType combat_type){
+    if (!valid_key(key)) return;
+    ep(key)->combat_type = combat_type;
+}
+
+CombatType entity_get_combat_type(EntityKey key){
+    if (!valid_key(key)) return NCC;
+    return ep(key)->combat_type;
+}
+
 void entity_set_position(EntityKey key, int x, int y) {
     if (!valid_key(key)) return;
     ep(key)->position.x = x;

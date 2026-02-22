@@ -49,6 +49,7 @@ void instance_kuribo(){
     entity_set_sprite_source(key, 2, 0, 0, 512, 512);
     entity_set_direction(key, IDLE);
     entity_set_direction_vec(key, 0, 0);
+    entity_set_combat_type(key, MOB);
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= IS_MOVABLE_MASK;
     bitmask |= HAS_COLIDER_MASK;
