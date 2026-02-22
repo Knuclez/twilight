@@ -5,7 +5,6 @@
 #include "action_q.h"
 #include "interface/animations_rsc.h"
 
-#include "systems/effect_system.h"
 #include "systems/movement.h"
 #include "systems/combat.h"
 #include "entities.h"  /* lifetime handled inside Entity */
@@ -88,7 +87,6 @@ void update(int current_time, float delta){
     process_action_q(current_time);
     movements_process_frame((void*)ents, delta);
     combat_system_tick(gs);
-    effect_system_tick(gs);
     tick_animations(delta, 30.0f);
     clean_queues(gs);
     if (current_time > last_second + 1000){

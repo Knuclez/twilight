@@ -58,8 +58,10 @@ void entities_list_init(){
         gs->entities[i].physical_bounds = (PhysicalBounds){0,0,0,0};
         gs->entities[i].sprite_source = (SpriteSource){0,0,0,0,0};
         gs->entities[i].lifetime = 0;
+
         gs->entities[i].animation = (AnimationState){0,0,0.0f};
         gs->entities[i].direction = IDLE;
+        gs->entities[i].combat_state = CHILL;
     }
 }
 
@@ -166,6 +168,16 @@ Direction entity_get_direction(EntityKey key) {
     return ep(key)->direction;
 }
 
+void entity_set_combat_state(EntityKey key, CombatState state){
+    if (!valid_key(key)) return;
+    ep(key)->combat_state = state;
+}
+
+CombatState entity_get_combat_state(EntityKey key) {
+    if (!valid_key(key)) return CHILL;
+    return ep(key)->combat_state;
+}
+
 void entity_set_lifetime(EntityKey key, int life) {
     if (!valid_key(key)) return;
     ep(key)->lifetime = life;
@@ -174,6 +186,16 @@ void entity_set_lifetime(EntityKey key, int life) {
 int entity_get_lifetime(EntityKey key) {
     if (!valid_key(key)) return 0;
     return ep(key)->lifetime;
+}
+
+void entity_set_combat_state_timer(EntityKey key, int combat_timer) {
+    if (!valid_key(key)) return;
+    ep(key)->combat_state_timer = combat_timer;
+}
+
+int entity_get_combat_state_timer(EntityKey key) {
+    if (!valid_key(key)) return 0;
+    return ep(key)->combat_state_timer;
 }
 
 void entity_set_damage(EntityKey key, int damage) {

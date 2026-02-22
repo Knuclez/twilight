@@ -48,13 +48,8 @@ void combat_system_tick(GameState *gs){
 
 	int new_health = hc - dc;
 	entity_set_health(attacked_key, new_health);
-	Effect new;
-	new.type = TREMBLE;
-	new.affected_entity_index = attacked_key.index;
-	new.affected_entity_generation = attacked_key.generation;
-	new.max_lifetime = 100;
-	new.current_lifetime = 100;
-	effect_queue_add(&gs->effect_queue, new);
+	entity_set_combat_state(attacked_key, TREMBLE);
+	entity_set_combat_state_timer(attacked_key, 100);
 	if (new_health <= 0){
 	    entity_deactivate(gs->entities, attacked_key);
 	}

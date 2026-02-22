@@ -7,16 +7,10 @@
 
 typedef enum {
     PLAYER_ATTACK,
-    DAMAGE_COLLISION 
 } ActionType;
 
-typedef struct {
-    EntityKey attacker;
-    EntityKey victim;
-} CollisionEvent;
 
 typedef union {
-    CollisionEvent collision;
     EntityKey attacker_key;
 } ActionData;
 

@@ -42,7 +42,7 @@ void draw_debug(SDL_Renderer *r, int x, int y, int width, int height){
 }
 
 void draw_debug_red(SDL_Renderer *r, int x, int y, int width, int height){
-    SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
+    SDL_SetRenderDrawColor(r, 255, 0, 120, 120);
     int center_x = x + (width / 2);
     int center_y = y + (height / 2);
 
@@ -85,18 +85,19 @@ void draw_entities(SDL_Renderer *r, float delta){
             if (anim_idx >= 0 && anim_idx < 10) {
                 AnimationRsc anim_data = anim_rscs[anim_idx];
                 int current_frame = e->animation.current_frame;
-                
-                /* calculate sprite position based on current frame */
-                if (e->direction == IDLE) {
+
+		if (e->direction == IDLE) {
                     sprite_src.x = anim_data.idle_x;
                 } else {
 		    sprite_src.x = anim_data.idle_x + 8 + ((current_frame + 1) * anim_data.x_offset);
                     //sprite_src.x = anim_data.idle_x + (current_frame * anim_data.x_offset);
                     /* direction-based Y offset */
                     sprite_shift_y = anim_data.y_offset * (e->direction - 1);
-                }
-            }
+                }    
+		            
+	    }
         }
+
 
 	PhysicalBounds pb = e->physical_bounds;
 
@@ -110,6 +111,11 @@ void draw_entities(SDL_Renderer *r, float delta){
         SDL_RenderCopy(r, txt, &src_rect, &output_rect);
         //draw_debug(r, draw_x, draw_y, draw_width, draw_height);
 	draw_debug_red(r, draw_x + pb.x, draw_y + pb.y, pb.width * 2, pb.height * 2);
+	if (e->combat_state == TREMBLE){
+	    SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
+	    SDL_Rect hit_mark_rect = { draw_x, draw_y, 10, 10};
+	    SDL_RenderFillRect(r, &hit_mark_rect);
+	}
     }
 }
 

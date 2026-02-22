@@ -41,6 +41,8 @@ typedef struct {
     int height;
 } SpriteSource;
 
+
+//STATES
 /* animation state kept here because it is part of entity data */
 typedef struct {
     int resource_index;      /* índice en animation_rscs */
@@ -49,7 +51,9 @@ typedef struct {
 } AnimationState;
 
 /* simple enum for direction; kept here for convenience */
+//should take IDLE out of direction, as it is a combat_State more than a directino
 typedef enum { IDLE, NW, N, NE, W, E, SW, S, SE } Direction;
+typedef enum { CHILL, CHASING, ATTACKING, ATTACKED, TREMBLE} CombatState;
 
 typedef struct {
     int index;
@@ -73,8 +77,11 @@ typedef struct Entity {
     int lifetime;
     int damage;
     int health;
+    int combat_state_timer;
+
     AnimationState animation;
     Direction direction;
+    CombatState combat_state;
 } Entity;
 
 
@@ -90,6 +97,12 @@ void entity_deactivate(Entity *entities, EntityKey key);
 /* setters/getters operate directly on the unified Entity struct */
 void entity_set_combat_type(EntityKey key, CombatType combat_type);
 CombatType entity_get_combat_type(EntityKey key);
+
+void entity_set_combat_state(EntityKey key, CombatState combate_state);
+CombatState entity_get_combat_state(EntityKey key);
+
+void entity_set_combat_state_timer(EntityKey key, int timer);
+int entity_get_combat_state_timer(EntityKey key);
 
 void entity_set_position(EntityKey key, int x, int y);
 Position entity_get_position(EntityKey key);
