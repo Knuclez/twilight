@@ -18,7 +18,7 @@
 //TRAITS
 /* component bitmask constants (same values as before) */
 #define IS_DRAWABLE_MASK    	0b00000000000000000000000000000010
-#define IS_MOVABLE_MASK     	0b00000000000000000000000000000100
+#define IS_MOVING_MASK     	0b00000000000000000000000000000100
 #define IS_PLAYER_MASK     	0b00000000000000000000000000001000
 #define HAS_ANIMATION_MASK 	0b00000000000000000000000000010000
 #define IS_DAMAGE_MASK		0b00000000000000000000000000100000
@@ -72,6 +72,7 @@ typedef struct Entity {
     Position position;
     Size size;
     DirectionVec direction_vec;
+    EntityKey target_key;
     PhysicalBounds physical_bounds;
     SpriteSource sprite_source;
     int lifetime;
@@ -92,6 +93,7 @@ void entities_list_init();           /* reset all slots to empty */
 EntityKey entity_create();           /* allocate a new entity */
 void entity_add_bitmask(EntityKey key, int n_bitmask);
 void entity_deactivate(Entity *entities, EntityKey key);
+void print_bitmask_debug(Entity *entities, EntityKey key);
 
 /* component helpers (formerly separate modules) */
 /* setters/getters operate directly on the unified Entity struct */

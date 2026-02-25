@@ -73,6 +73,33 @@ void entity_deactivate(Entity *ents, EntityKey key){
     }
 }
 
+void print_bitmask_debug(Entity *ents, EntityKey key){
+    if(ents[key.index].key.generation == key.generation){
+	int bitmask = ents[key.index].bitmask;
+	printf("bitmask de indx [%u] es: %b = {", key.index, bitmask);
+	if(bitmask & IS_DRAWABLE_MASK){
+	    printf("IS_DRAWABLE_MASK,");
+	}
+	if(bitmask & IS_MOVING_MASK){
+	    printf("IS_MOVING_MASK,");
+	}
+	if(bitmask & IS_PLAYER_MASK){
+	    printf("IS_PLAYER_MASK,");
+	}
+	if(bitmask & HAS_ANIMATION_MASK){
+	    printf("HAS_ANIMATION_MASK,");
+	}
+	if(bitmask & IS_DAMAGE_MASK){
+	    printf("IS_DAMAGE_MASK,");
+	}
+	if(bitmask & HAS_COLIDER_MASK){
+	    printf("HAS_COLIDER_MASK,");
+	}
+	printf("}\n");
+	return;
+    }
+}
+
 /* component accessors ------------------------------------------------------ */
 
 static int valid_key(EntityKey key) {
@@ -99,7 +126,7 @@ void entity_set_position(EntityKey key, int x, int y) {
     if (!valid_key(key)) return;
     ep(key)->position.x = x;
     ep(key)->position.y = y;
-    ep(key)->bitmask |= IS_MOVABLE_MASK;
+    ep(key)->bitmask |= IS_MOVING_MASK;
 }
 
 Position entity_get_position(EntityKey key) {
@@ -150,7 +177,6 @@ void entity_set_direction_vec(EntityKey key, int x, int y) {
     if (!valid_key(key)) return;
     ep(key)->direction_vec.x = x;
     ep(key)->direction_vec.y = y;
-    ep(key)->bitmask |= IS_MOVABLE_MASK;
 }
 
 DirectionVec entity_get_direction_vec(EntityKey key) {

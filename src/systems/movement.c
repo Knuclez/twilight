@@ -13,17 +13,18 @@ int movements_process_frame(void *v_ents, float delta){
     /* iterate over all alive entities */
     Entity *ents = (Entity*) v_ents;
     int max = entities_max_index();
-    int speed = 200;
+    int speed = 70;
 
+    //print_bitmask_debug(ents, e->key);
     for (int i = 0; i < max; i++) {
         Entity *e = &ents[i];
         if (e->key.index < 0) continue;         /* empty slot */
-        if ((e->bitmask & IS_MOVABLE_MASK) == 0) continue;
-        if ((e->bitmask & IS_PLAYER_MASK) == 0) continue;
+        if ((e->bitmask & IS_MOVING_MASK) == 0) continue;
 
         /* apply movement directly on the entity fields */
-        e->position.x += (int)(speed * delta) * e->direction_vec.x;
-        e->position.y += (int)(speed * delta) * e->direction_vec.y;
+        /* direction_vec is scaled by 10, so divide by 10 here */
+        e->position.x += (int)(speed * delta) * e->direction_vec.x ;
+        e->position.y += (int)(speed * delta) * e->direction_vec.y ;
     }
     
     return 1;

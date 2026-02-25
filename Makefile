@@ -1,7 +1,7 @@
 # === Compilador y flags ===
 CC       = gcc
 CFLAGS   = -Wall -std=gnu17 -Iinclude -MMD -MP $(shell sdl2-config --cflags)
-LDFLAGS  = $(shell sdl2-config --libs) -lSDL2_ttf -lSDL2_image 
+LDFLAGS  = $(shell sdl2-config --libs) -lSDL2_ttf -lSDL2_image -lm
 
 # === Directorios ===
 SRC_DIRS = src

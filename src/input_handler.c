@@ -11,19 +11,19 @@ void event_key_down_handle(SDL_Event event){
 
     if(event.key.keysym.sym == SDLK_w){
         p->direction = N;
-        p->direction_vec.y = -1;
+        p->direction_vec.y = -10;
     }
     if(event.key.keysym.sym == SDLK_d){
         p->direction = E;
-        p->direction_vec.x = 1;
+        p->direction_vec.x = 10;
     }
     if(event.key.keysym.sym == SDLK_a){
         p->direction = W;
-        p->direction_vec.x = -1;
+        p->direction_vec.x = -10;
     }
     if(event.key.keysym.sym == SDLK_s){
         p->direction = S;
-        p->direction_vec.y = 1;
+        p->direction_vec.y = 10;
     }
     if(event.key.keysym.sym == SDLK_j){
         Action new_act = {0};

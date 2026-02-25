@@ -32,7 +32,7 @@ void instance_rapp(){
 
     bitmask |= HAS_ANIMATION_MASK;
     bitmask |= IS_DRAWABLE_MASK;
-    bitmask |= IS_MOVABLE_MASK;
+    bitmask |= IS_MOVING_MASK;
     bitmask |= IS_PLAYER_MASK;
     bitmask |= HAS_COLIDER_MASK;
     entity_add_bitmask(key, bitmask);
@@ -51,7 +51,6 @@ void instance_kuribo(){
     entity_set_direction_vec(key, 0, 0);
     entity_set_combat_type(key, MOB);
     bitmask |= IS_DRAWABLE_MASK;
-    bitmask |= IS_MOVABLE_MASK;
     bitmask |= HAS_COLIDER_MASK;
     entity_add_bitmask(key, bitmask);
 }
