@@ -13,7 +13,7 @@ int movements_process_frame(void *v_ents, float delta){
     /* iterate over all alive entities */
     Entity *ents = (Entity*) v_ents;
     int max = entities_max_index();
-    int speed = 70;
+    int speed = 200;
 
     //print_bitmask_debug(ents, e->key);
     for (int i = 0; i < max; i++) {
@@ -23,8 +23,8 @@ int movements_process_frame(void *v_ents, float delta){
 
         /* apply movement directly on the entity fields */
         /* direction_vec is scaled by 10, so divide by 10 here */
-        e->position.x += (int)(speed * delta) * e->direction_vec.x ;
-        e->position.y += (int)(speed * delta) * e->direction_vec.y ;
+        e->position.x += (int)(speed * delta) * e->direction_vec.x / 10;
+        e->position.y += (int)(speed * delta) * e->direction_vec.y / 10;
     }
     
     return 1;

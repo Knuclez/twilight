@@ -60,7 +60,7 @@ void entities_list_init(){
         gs->entities[i].lifetime = 0;
 
         gs->entities[i].animation = (AnimationState){0,0,0.0f};
-        gs->entities[i].direction = IDLE;
+        gs->entities[i].direction = DIR_IDLE;
         gs->entities[i].combat_state = CHILL;
     }
 }
@@ -190,13 +190,17 @@ void entity_set_direction(EntityKey key, Direction dir) {
 }
 
 Direction entity_get_direction(EntityKey key) {
-    if (!valid_key(key)) return IDLE;
+    if (!valid_key(key)) return DIR_IDLE;
     return ep(key)->direction;
 }
 
 void entity_set_combat_state(EntityKey key, CombatState state){
     if (!valid_key(key)) return;
+    if (ep(key)->combat_state == state) return;
     ep(key)->combat_state = state;
+    /* reset animation so the new clip starts from frame 0 */
+    ep(key)->animation.current_frame = 0;
+    ep(key)->animation.frame_timer   = 0.0f;
 }
 
 CombatState entity_get_combat_state(EntityKey key) {
@@ -244,9 +248,9 @@ int entity_get_health(EntityKey key) {
     return ep(key)->health;
 }
 
-void entity_set_animation(EntityKey key, int resource_index) {
+void entity_set_animation(EntityKey key, int anim_set_index) {
     if (!valid_key(key)) return;
-    ep(key)->animation.resource_index = resource_index;
+    ep(key)->animation.anim_set_index = anim_set_index;
     ep(key)->animation.current_frame = 0;
     ep(key)->animation.frame_timer = 0.0f;
     ep(key)->bitmask |= HAS_ANIMATION_MASK;

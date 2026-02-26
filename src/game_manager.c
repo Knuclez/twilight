@@ -50,27 +50,25 @@ void tick_lifetimes() {
     }
 }
 
-void tick_animations(float delta_time, float frame_rate) {
+void tick_animations(float delta_time) {
     Entity *entities = entities_get();
+    AnimationClip *clips = animation_clips_get();
+    AnimationSet  *sets  = animation_sets_get();
     for (int i = 0; i < entities_max_index(); i++) {
         Entity *e = &entities[i];
         if (e->key.index < 0) continue;
-        if ((e->bitmask & HAS_ANIMATION_MASK) &&
-            e->animation.resource_index >= 0) {
-            e->animation.frame_timer += delta_time;
-            float frame_length = 1.0f / frame_rate;
-            if (e->animation.frame_timer >= frame_length) {
-                e->animation.frame_timer -= frame_length;
-                e->animation.current_frame++;
-                
-                /* wrap-around: need to get the frame count from animation resource */
-                AnimationRsc* anim_rscs = animation_rscs_get();
-                if (e->animation.resource_index < 10) { /* assuming max 10 resources */
-                    int frame_count = anim_rscs[e->animation.resource_index].frame_amount;
-                    if (frame_count > 0 && e->animation.current_frame >= frame_count) {
-                        e->animation.current_frame = 0;
-                    }
-                }
+        if (!(e->bitmask & HAS_ANIMATION_MASK)) continue;
+        int clip_idx = animation_get_clip_for_entity(e->animation.anim_set_index,
+                                                     e->combat_state, e->direction);
+        AnimationClip clip = clips[clip_idx];
+        if (clip.fps <= 0.0f || clip.frame_count <= 1) continue;
+        e->animation.frame_timer += delta_time;
+        float frame_length = 1.0f / clip.fps;
+        if (e->animation.frame_timer >= frame_length) {
+            e->animation.frame_timer -= frame_length;
+            e->animation.current_frame++;
+            if (e->animation.current_frame >= clip.frame_count) {
+                e->animation.current_frame = clip.loop ? 0 : clip.frame_count - 1;
             }
         }
     }
@@ -87,7 +85,7 @@ void update(int current_time, float delta){
     process_action_q(current_time);
     movements_process_frame((void*)ents, delta);
     combat_system_tick(gs);
-    tick_animations(delta, 30.0f);
+    tick_animations(delta);
     clean_queues(gs);
     if (current_time > last_second + 1000){
         tick_lifetimes();

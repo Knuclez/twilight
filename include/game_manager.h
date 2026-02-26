@@ -6,6 +6,6 @@ void update(int current_time, float delta);
 
 /* system tick functions */
 void tick_lifetimes();
-void tick_animations(float delta_time, float frame_rate);
+void tick_animations(float delta_time);
 
 #endif

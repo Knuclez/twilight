@@ -45,14 +45,23 @@ typedef struct {
 //STATES
 /* animation state kept here because it is part of entity data */
 typedef struct {
-    int resource_index;      /* índice en animation_rscs */
-    int current_frame;       /* frame actual (0 a frame_amount-1) */
+    int anim_set_index;      /* índice en g_anim_sets */
+    int current_frame;       /* frame actual */
     float frame_timer;       /* timer para cambio de frame */
 } AnimationState;
 
-/* simple enum for direction; kept here for convenience */
-//should take IDLE out of direction, as it is a combat_State more than a directino
-typedef enum { IDLE, NW, N, NE, W, E, SW, S, SE } Direction;
+/* Direction is a bitmask: bits can be OR-ed together for diagonals.
+   DIR_IDLE (0) means no movement. */
+typedef int Direction;
+#define DIR_IDLE  0
+#define DIR_N     0b00000001
+#define DIR_S     0b00000010
+#define DIR_W     0b00000100
+#define DIR_E     0b00001000
+#define DIR_NW    (DIR_N | DIR_W)
+#define DIR_NE    (DIR_N | DIR_E)
+#define DIR_SW    (DIR_S | DIR_W)
+#define DIR_SE    (DIR_S | DIR_E)
 typedef enum { CHILL, CHASING, ATTACKING, ATTACKED, TREMBLE} CombatState;
 
 typedef struct {

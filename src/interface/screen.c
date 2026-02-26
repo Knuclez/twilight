@@ -62,60 +62,65 @@ void draw_debug_red(SDL_Renderer *r, int x, int y, int width, int height){
     SDL_RenderDrawLines(r, contour, 5);
 }
 
+static int direction_to_row(Direction dir) {
+    switch(dir) {
+        case DIR_NW: return 0;
+        case DIR_N:  return 1;
+        case DIR_NE: return 2;
+        case DIR_W:  return 3;
+        case DIR_E:  return 4;
+        case DIR_SW: return 5;
+        case DIR_S:  return 6;
+        case DIR_SE: return 7;
+        default:     return 0;
+    }
+}
+
 void draw_entities(SDL_Renderer *r, float delta){
     SDL_Texture *txt;
     Entity *ents = entities_get();
     int max = entities_max_index();
-
-    /* get animation resources for sprite positioning */
-    AnimationRsc* anim_rscs = animation_rscs_get();
+    AnimationClip *clips = animation_clips_get();
+    AnimationSet  *sets  = animation_sets_get();
+    (void)sets;
 
     for (int i = 0; i < max; i++) {
         Entity *e = &ents[i];
         if (e->key.index < 0) continue;
         if (!(e->bitmask & IS_DRAWABLE_MASK)) continue;
 
-        SpriteSource sprite_src = e->sprite_source;
-        txt = get_texture_by_index(sprite_src.txtr_indx);
-        if (!txt) continue;
-
-        int sprite_shift_y = 0;
-        if (e->bitmask & HAS_ANIMATION_MASK) {
-            int anim_idx = e->animation.resource_index;
-            if (anim_idx >= 0 && anim_idx < 10) {
-                AnimationRsc anim_data = anim_rscs[anim_idx];
-                int current_frame = e->animation.current_frame;
-
-		if (e->direction == IDLE) {
-                    sprite_src.x = anim_data.idle_x;
-                } else {
-		    sprite_src.x = anim_data.idle_x + 8 + ((current_frame + 1) * anim_data.x_offset);
-                    //sprite_src.x = anim_data.idle_x + (current_frame * anim_data.x_offset);
-                    /* direction-based Y offset */
-                    sprite_shift_y = anim_data.y_offset * (e->direction - 1);
-                }    
-		            
-	    }
-        }
-
-
-	PhysicalBounds pb = e->physical_bounds;
-
+        PhysicalBounds pb = e->physical_bounds;
         int draw_x = e->position.x - e->size.x;
         int draw_y = e->position.y - e->size.y;
         int draw_width = e->size.x * 2;
         int draw_height = e->size.y * 2;
         SDL_Rect output_rect = {draw_x, draw_y, draw_width, draw_height};
-        SDL_Rect src_rect = {sprite_src.x, sprite_src.y + sprite_shift_y,
-                             sprite_src.width, sprite_src.height};
+
+        SDL_Rect src_rect;
+        if (e->bitmask & HAS_ANIMATION_MASK) {
+            int clip_idx = animation_get_clip_for_entity(e->animation.anim_set_index,
+                                                         e->combat_state, e->direction);
+            AnimationClip clip = clips[clip_idx];
+            txt = get_texture_by_index(clip.txtr_indx);
+            if (!txt) continue;
+            int src_x = clip.origin_x + (e->animation.current_frame * clip.x_stride);
+            int src_y = clip.origin_y + (direction_to_row(e->direction) * clip.y_stride);
+            src_rect = (SDL_Rect){ src_x, src_y, clip.frame_w, clip.frame_h };
+        } else {
+            SpriteSource sprite_src = e->sprite_source;
+            txt = get_texture_by_index(sprite_src.txtr_indx);
+            if (!txt) continue;
+            src_rect = (SDL_Rect){ sprite_src.x, sprite_src.y,
+                                   sprite_src.width, sprite_src.height };
+        }
+
         SDL_RenderCopy(r, txt, &src_rect, &output_rect);
-        //draw_debug(r, draw_x, draw_y, draw_width, draw_height);
-	draw_debug_red(r, draw_x + pb.x, draw_y + pb.y, pb.width * 2, pb.height * 2);
-	if (e->combat_state == TREMBLE){
-	    SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
-	    SDL_Rect hit_mark_rect = { draw_x, draw_y, 10, 10};
-	    SDL_RenderFillRect(r, &hit_mark_rect);
-	}
+        draw_debug_red(r, draw_x + pb.x, draw_y + pb.y, pb.width * 2, pb.height * 2);
+        if (e->combat_state == TREMBLE){
+            SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
+            SDL_Rect hit_mark_rect = { draw_x, draw_y, 10, 10};
+            SDL_RenderFillRect(r, &hit_mark_rect);
+        }
     }
 }
 

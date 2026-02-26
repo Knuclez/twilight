@@ -27,7 +27,6 @@ void combat_process_attack(EntityKey attacker_key){
 
     Position att_pos = entity_get_position(attacker_key);
     DirectionVec att_dir = entity_get_direction_vec(attacker_key);
-    PhysicalBounds pb = entity_get_physical_bounds(attacker_key);
 
     int radio = 10;
     int offset_x = att_dir.x * radio;
@@ -55,16 +54,39 @@ void combat_system_tick(GameState *gs){
     CollisionQueue collision_q = gs->collision_queue;
     int count = collision_queue_get_count(&collision_q);
     EntityKey attacker_key;
+    EntityKey attack_key;
     EntityKey attacked_key;
 
     Entity *ent;
+
+    for(int i = 0; i < count; i++){
+	attacker_key = collision_q.collisions[i].causal_entity;
+	attack_key = collision_q.collisions[i].entity1;
+	attacked_key = collision_q.collisions[i].entity2;
+	if(entity_get_combat_type(attacked_key) != MOB){continue;}
+	int dc = entity_get_damage(attack_key);
+	int hc = entity_get_health(attacked_key);
+
+	int new_health = hc - dc;
+	entity_set_health(attacked_key, new_health);
+	entity_set_target(attacked_key, attacker_key);
+	entity_set_combat_state(attacked_key, TREMBLE);
+	entities[attacked_key.index].bitmask &= ~IS_MOVING_MASK;
+	entity_set_direction_vec(attacked_key, 0, 0);
+	entity_set_combat_state_timer(attacked_key, 10);
+	if (new_health <= 0){
+	    entity_deactivate(gs->entities, attacked_key);
+	}
+	printf("%u health\n", new_health);
+    }
+
     for (int j = 0; j < ent_count; j++){
 	ent = &entities[j];
 	if(ent->combat_state == TREMBLE){
 	    printf("%u timer\n",ent->combat_state_timer);
 	    ent->combat_state_timer -= 1; 
 	    if(ent->combat_state_timer <= 0){
-		ent->combat_state = CHASING;
+		entity_set_combat_state(ent->key, CHASING);
 		ent->bitmask |= IS_MOVING_MASK;
 	    }    
 	}
@@ -75,7 +97,7 @@ void combat_system_tick(GameState *gs){
 	    VectorAndMagnitude vec_and_mag = vector_to_target_position_size_10(current_position, target_position);
 	    if (vec_and_mag.magnitude <= 15) {
 		entity_set_direction_vec(ent->key, 0, 0);
-		ent->bitmask |= ~IS_MOVING_MASK;
+		ent->bitmask &= ~IS_MOVING_MASK;
 		ent->combat_state = ATTACKING;
 		continue;
 	    }
@@ -83,25 +105,6 @@ void combat_system_tick(GameState *gs){
 	}
 	if(ent->combat_state == ATTACKING){
 	}
-    }
-
-    for(int i = 0; i < count; i++){
-	attacker_key = collision_q.collisions[i].causal_entity;
-	attacked_key = collision_q.collisions[i].entity2;
-	if(entity_get_combat_type(attacked_key) != MOB){continue;}
-	int dc = entity_get_damage(attacker_key);
-	int hc = entity_get_health(attacked_key);
-
-	int new_health = hc - dc;
-	entity_set_health(attacked_key, new_health);
-	printf("attacker_key %u\n:",attacker_key.index);
-	entity_set_target(attacked_key, attacker_key);
-	entity_set_combat_state(attacked_key, TREMBLE);
-	entity_set_combat_state_timer(attacked_key, 100);
-	if (new_health <= 0){
-	    entity_deactivate(gs->entities, attacked_key);
-	}
-	printf("%u health\n", new_health);
     }
     return;
 }
