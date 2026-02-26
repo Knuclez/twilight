@@ -6,7 +6,7 @@
 #include "event_queues/collision_queue.h"
 
 
-void individual_collider_check_collisions(EntityKey ent){
+void individual_collider_check_collisions(EntityKey ent, EntityKey causal_ent){
     GameState *gs = get_game_state_p();
     Entity *ents = entities_get();
     Entity to_check = ents[ent.index];
@@ -52,7 +52,7 @@ void individual_collider_check_collisions(EntityKey ent){
 	    }
 	    
 	    if(to_check.bitmask & IS_DAMAGE_MASK){
-		collision_queue_add(&gs->collision_queue, ent, e.key);
+		collision_queue_add(&gs->collision_queue, ent, e.key, causal_ent);
 	    }
 	}
     } 

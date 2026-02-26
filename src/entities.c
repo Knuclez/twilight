@@ -257,3 +257,13 @@ AnimationState entity_get_animation(EntityKey key) {
     return ep(key)->animation;
 }
 
+void entity_set_target(EntityKey key, EntityKey target) {
+    if (!valid_key(key)) return;
+    ep(key)->target_key = target;
+}
+
+EntityKey entity_get_target(EntityKey key) {
+    if (!valid_key(key)) return (EntityKey){0, 0};
+    return ep(key)->target_key;
+}
+

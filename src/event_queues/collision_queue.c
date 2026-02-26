@@ -9,12 +9,13 @@ void collision_queue_init(CollisionQueue* queue) {
     queue->next_slot = 0;
 }
 
-int collision_queue_add(CollisionQueue* queue, EntityKey entity1, EntityKey entity2) {
+int collision_queue_add(CollisionQueue* queue, EntityKey entity1, EntityKey entity2, EntityKey causal_entity) {
     if (queue == NULL) return -1;
     if (queue->next_slot >= COLLISION_QUEUE_SIZE) return -1; // Queue is full
     
     queue->collisions[queue->next_slot].entity1 = entity1;
     queue->collisions[queue->next_slot].entity2 = entity2;
+    queue->collisions[queue->next_slot].causal_entity = causal_entity;
     queue->next_slot++;
     
     return queue->next_slot - 1; // Return index of added collision

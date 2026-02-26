@@ -6,6 +6,20 @@
 #include "game_state.h"
 #include "systems/physics.h"
 
+typedef struct {
+    DirectionVec direction_vector;
+    int magnitude;
+} VectorAndMagnitude;
+
+VectorAndMagnitude vector_to_target_position_size_10(Position current_position, Position target_position){
+    int x_diff = target_position.x - current_position.x;
+    int y_diff = target_position.y - current_position.y;
+    int mag = (int)sqrt((x_diff * x_diff) + (y_diff * y_diff));
+    int x_diff_norm = (x_diff * 10) / mag;
+    int y_diff_norm = (y_diff * 10) / mag;
+    DirectionVec vec = (DirectionVec){x_diff_norm, y_diff_norm};
+    return (VectorAndMagnitude){vec, mag};
+}
 
 void combat_process_attack(EntityKey attacker_key){
     EntityKey key = entity_create();
@@ -31,7 +45,7 @@ void combat_process_attack(EntityKey attacker_key){
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= IS_DAMAGE_MASK;
     entity_add_bitmask(key, bitmask);
-    individual_collider_check_collisions(key);
+    individual_collider_check_collisions(key, attacker_key);
 }
 
 void combat_system_tick(GameState *gs){
@@ -51,25 +65,28 @@ void combat_system_tick(GameState *gs){
 	    ent->combat_state_timer -= 1; 
 	    if(ent->combat_state_timer <= 0){
 		ent->combat_state = CHASING;
+		ent->bitmask |= IS_MOVING_MASK;
 	    }    
 	}
 	if(ent->combat_state == CHASING){
+	    printf("chasing\n");
 	    Position target_position = entity_get_position(ent->target_key);
 	    Position current_position = ent->position;
-	    int x_diff = target_position.x - current_position.x;
-	    int y_diff = target_position.y - current_position.y;
-	    int mag = (int)sqrt((x_diff * x_diff) + (y_diff * y_diff));
-	    if (mag == 0) continue;
-	    int x_diff_norm = (x_diff * 10) / mag;
-	    int y_diff_norm = (y_diff * 10) / mag;
-
-	    entity_set_direction_vec(ent->key, x_diff_norm, y_diff_norm);
-	    ent->bitmask |= IS_MOVING_MASK;
+	    VectorAndMagnitude vec_and_mag = vector_to_target_position_size_10(current_position, target_position);
+	    if (vec_and_mag.magnitude <= 15) {
+		entity_set_direction_vec(ent->key, 0, 0);
+		ent->bitmask |= ~IS_MOVING_MASK;
+		ent->combat_state = ATTACKING;
+		continue;
+	    }
+	    entity_set_direction_vec(ent->key, vec_and_mag.direction_vector.x, vec_and_mag.direction_vector.y);
+	}
+	if(ent->combat_state == ATTACKING){
 	}
     }
 
     for(int i = 0; i < count; i++){
-	attacker_key = collision_q.collisions[i].entity1;
+	attacker_key = collision_q.collisions[i].causal_entity;
 	attacked_key = collision_q.collisions[i].entity2;
 	if(entity_get_combat_type(attacked_key) != MOB){continue;}
 	int dc = entity_get_damage(attacker_key);
@@ -77,6 +94,8 @@ void combat_system_tick(GameState *gs){
 
 	int new_health = hc - dc;
 	entity_set_health(attacked_key, new_health);
+	printf("attacker_key %u\n:",attacker_key.index);
+	entity_set_target(attacked_key, attacker_key);
 	entity_set_combat_state(attacked_key, TREMBLE);
 	entity_set_combat_state_timer(attacked_key, 100);
 	if (new_health <= 0){

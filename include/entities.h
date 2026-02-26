@@ -136,4 +136,7 @@ int entity_get_health(EntityKey key);
 void entity_set_animation(EntityKey key, int resource_index);
 AnimationState entity_get_animation(EntityKey key);
 
+void entity_set_target(EntityKey key, EntityKey target);
+EntityKey entity_get_target(EntityKey key);
+
 #endif
