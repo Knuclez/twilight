@@ -82,6 +82,7 @@ void combat_system_tick(GameState *gs){
 
     for (int j = 0; j < ent_count; j++){
 	ent = &entities[j];
+	if(ent->key.index == 0){continue;}
 	if(ent->combat_state == TREMBLE){
 	    printf("%u timer\n",ent->combat_state_timer);
 	    ent->combat_state_timer -= 1; 
