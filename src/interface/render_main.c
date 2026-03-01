@@ -6,6 +6,7 @@
 #include "interface/rendering/texturing.h"
 #include "interface/screen.h"
 #include "interface/animations_rsc.h"
+#include "interface/input.h"
 
 SDL_Window* window;
 SDL_Renderer* renderer;
@@ -16,7 +17,7 @@ void* get_renderer(){
 }
 
 int initialice_sdl(){
-    if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) < 0){
+    if ((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER)) < 0){
 	printf("Error initiatin SDL %s \n", SDL_GetError());
 	return 0;
     }
@@ -37,6 +38,7 @@ int initialice_sdl(){
     animation_rscs_init();
     load_textures(renderer);
     screen_init();
+    input_init();
     return 1;
 }
 

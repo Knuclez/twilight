@@ -11,6 +11,7 @@
 #include "systems/movement.h"
 
 #include "entities.h"  /* unified entity storage */
+#include "editor.h"
 
 void screen_entity_clicked(int id_ent){
     (void)id_ent;
@@ -115,7 +116,9 @@ void draw_entities(SDL_Renderer *r, float delta){
         }
 
         SDL_RenderCopy(r, txt, &src_rect, &output_rect);
-        draw_debug_red(r, draw_x + pb.x, draw_y + pb.y, pb.width * 2, pb.height * 2);
+	if (editor_is_active()){
+	    draw_debug_red(r, draw_x + pb.x, draw_y + pb.y, pb.width * 2, pb.height * 2);
+	}
         if (e->combat_state == TREMBLE){
             SDL_SetRenderDrawColor(r, 255, 0, 0, 255);
             SDL_Rect hit_mark_rect = { draw_x, draw_y, 10, 10};
@@ -128,6 +131,9 @@ void screen_present(SDL_Renderer *renderer, float delta){
     SDL_SetRenderDrawColor(renderer, 0, 210, 0, 255);
     SDL_RenderClear(renderer);
     draw_entities(renderer, delta);
+    if (editor_is_active()){
+        editor_render(renderer);
+    }
     SDL_RenderPresent(renderer);
 }
 

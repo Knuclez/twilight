@@ -57,10 +57,24 @@ void instance_kuribo(){
     entity_add_bitmask(key, bitmask);
 }
 
+void instance_tree(){
+    EntityKey key = entity_create();
+    int bitmask = 0;
+
+    entity_set_position(key, 300, 200);
+    entity_set_size(key, 100, 100);
+    entity_set_physical_bounds(key, 0, 0, 50, 50);
+    entity_set_sprite_source(key, 0, 66, 66, 64, 64);
+    bitmask |= IS_DRAWABLE_MASK;
+    bitmask |= HAS_COLIDER_MASK;
+    entity_add_bitmask(key, bitmask);
+    return;
+}
 
 void field_scene_load_ecs(){
     instance_rapp();
     instance_kuribo();
+    instance_tree();
 }
 
 

@@ -3,6 +3,7 @@
 #include "interface/rendering/render_main.h"
 #include "interface/input.h"
 #include "game_manager.h"
+#include "editor.h"
 
 const int FPS = 60;
 const int FRAME_TIME = 1000/ FPS;
@@ -17,6 +18,7 @@ int initialize_stuff(){
     }
 
     initialize_game_systems();
+    init_editor();
     last_frame_time = SDL_GetTicks();
 
     return 1;
@@ -41,7 +43,9 @@ int main(int argc, char* argv[])
 	float delta = elapsed_time / 1000.0f;
 
 	process_input(&looping);
-	update(current_time, delta);
+	if(get_editor()->editor_bitmask & IS_GAME_RUNNING){
+	    update(current_time, delta);
+	}
 	render(delta);
 
 	Uint32 frame_time = SDL_GetTicks() - current_time;

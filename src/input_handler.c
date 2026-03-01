@@ -55,6 +55,15 @@ void event_key_up_handle(SDL_Event event){
     return;
 }
 
+void controller_axis_interpret(int x_axis, int y_axis){
+    EntityKey player = (get_game_state_p())->player_key;
+    Entity *p = entities_get() + player.index;
+
+    p->direction_vec.x = x_axis;
+    p->direction_vec.y = y_axis;
+    printf("entering axis in engine\n");
+    return;
+}
 
 /*
 void event_key_up_handle(SDL_Event event){

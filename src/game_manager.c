@@ -7,6 +7,7 @@
 
 #include "systems/movement.h"
 #include "systems/combat.h"
+#include "systems/npc_ai.h"
 #include "entities.h"  /* lifetime handled inside Entity */
 
 int last_second = 0;
@@ -86,6 +87,7 @@ void update(int current_time, float delta){
     movements_process_frame((void*)ents, delta);
     combat_system_tick(gs);
     tick_animations(delta);
+    tick_npc_ai(gs);
     clean_queues(gs);
     if (current_time > last_second + 1000){
         tick_lifetimes();
