@@ -17,7 +17,7 @@ EntityKey entity_create(){
     GameState *gs = get_game_state_p();
     /* find a free slot */
     for (int i = 1; i < MAX_ENTITIES; i++) {
-        if (gs->entities[i].key.index == -1) {
+        if (gs->entities[i].key.index == 0) {
             /* reset everything to zero/defaults then set index/generation */
             memset(&gs->entities[i], 0, sizeof(Entity));
             result.index = i;
@@ -32,7 +32,7 @@ EntityKey entity_create(){
 }
 
 void entity_add_bitmask(EntityKey key, int n_bitmas){
-    if (key.index < 0 || key.index >= MAX_ENTITIES) {
+    if (key.index <= 0 || key.index >= MAX_ENTITIES) {
         return;
     }
     GameState *gs = get_game_state_p();
@@ -49,7 +49,7 @@ void entities_list_init(){
     gs->max_index = 0;
     for (int i = 0; i < MAX_ENTITIES; i++) {
         /* mark slot as empty */
-        gs->entities[i].key.index = -1;
+        gs->entities[i].key.index = 0;
         gs->entities[i].key.generation = 0;
         gs->entities[i].bitmask = 0;
         gs->entities[i].position = (Position){0,0};

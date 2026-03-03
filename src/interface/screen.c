@@ -87,7 +87,7 @@ void draw_entities(SDL_Renderer *r, float delta){
 
     for (int i = 0; i < max; i++) {
         Entity *e = &ents[i];
-        if (e->key.index < 0) continue;
+        if (e->key.index <= 0) continue;
         if (!(e->bitmask & IS_DRAWABLE_MASK)) continue;
 
         PhysicalBounds pb = e->physical_bounds;

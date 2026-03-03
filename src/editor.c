@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
+#include "interface/rendering/texturing.h"
 #include "editor.h"
 #include "entities.h"
 #include "game_state.h"
@@ -31,33 +32,7 @@ void editor_update(float delta){
 }
 
 void editor_mouse_button_clicked(SDL_Event event){
-    GameState *gs = get_game_state_p();
-    Entity *entities = gs->entities;
-    Entity *ent;
-    for(int i = 0; i < gs->max_index; i++){
-	ent = &entities[i];
-	if(ent->key.index == 0){continue;}
-	if(!(ent->bitmask & IS_DRAWABLE_MASK)){continue;}
-	//TODO ENTITY COLLISION CHECK
-	if(left_side > r_s){
-	    continue;
-	}
-	    right_side = to_check.position.x + to_check.physical_bounds.width + to_check.physical_bounds.x;
-	    l_s = e.position.x - e.physical_bounds.width + to_check.physical_bounds.x;
-	    if(right_side < l_s){
-		continue;
-	    }
-	    top = to_check.position.y - to_check.physical_bounds.height + to_check.physical_bounds.y;
-	    b = e.position.y + e.physical_bounds.height + to_check.physical_bounds.y;
-	    if(top > b){
-		continue;
-	    }
-	    bottom = to_check.position.y + to_check.physical_bounds.height + to_check.physical_bounds.y;
-	    t = e.position.y - e.physical_bounds.height + to_check.physical_bounds.y;
-	    if(bottom < t){
-		continue;
-	    }
-    }
+    printf("button clicked in editor\n");
 }
 
 void editor_interpret_key_event(SDL_Event event){
@@ -70,18 +45,44 @@ void editor_interpret_key_event(SDL_Event event){
 
 /* Render del editor encima del juego: borde indicador, gizmos, paneles. */
 void editor_render(SDL_Renderer *renderer){
+    int w, h;
+    SDL_GetRendererOutputSize(renderer, &w, &h);
+
     /* Borde rojo para indicar modo editor activo */
+    int border = 4;
     SDL_SetRenderDrawColor(renderer, 255, 50, 50, 255);
-    SDL_Rect top    = {0,   0,   800, 4};
-    SDL_Rect bottom = {0,   596, 800, 4};
-    SDL_Rect left   = {0,   0,   4,   600};
-    SDL_Rect right  = {796, 0,   4,   600};
+    SDL_Rect top    = {0,        0,        w,      border};
+    SDL_Rect bottom = {0,        h-border, w,      border};
+    SDL_Rect left   = {0,        0,        border, h};
+    SDL_Rect right  = {w-border, 0,        border, h};
     SDL_RenderFillRect(renderer, &top);
     SDL_RenderFillRect(renderer, &bottom);
     SDL_RenderFillRect(renderer, &left);
     SDL_RenderFillRect(renderer, &right);
 
     /* TODO: grilla, inspector de entidades, panel de propiedades, boton pause */
+
+    //QUIERO HACER UNA LISTA DE ENTIDADES EN ESTE COSTADITO
+    GameState *gs = get_game_state_p();
+    Entity *entities = gs->entities;
+    int max_ents = gs->max_index;
+
+    int panel_w = w / 4;
+    int panel_h = h / 2;
+    SDL_SetRenderDrawColor(renderer, 250, 250, 250, 255);
+    SDL_Rect panel = {w - panel_w, 0, panel_w, panel_h};
+    SDL_RenderFillRect(renderer, &panel);
+    int row_h = 20;
+    int row = 0;
+    for(int i = 0; i < max_ents; i++){
+	if(entities[i].key.index == 0){continue;}
+	char s[50];
+	snprintf(s, sizeof(s), "index: %d", entities[i].key.index);
+	SDL_Texture *txt = instance_dynamic_text_texture(renderer, s);
+	SDL_Rect output_rect = {panel.x + 5, panel.y + 5 + (row * row_h), panel.w - 10, row_h - 2};
+	SDL_RenderCopy(renderer, txt, NULL, &output_rect);
+	row++;
+    }
 }
 
 void init_editor(){
