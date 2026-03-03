@@ -2,12 +2,15 @@
 #define EDITOR_H
 
 #include <SDL2/SDL.h>
+#include "interface/UI/ui_button.h"
 
 #define IS_EDITOR_ACTIVE 	0b00000000000000000000000000000001
 #define IS_GAME_RUNNING 	0b00000000000000000000000000000010
 
 typedef struct {
-    int editor_bitmask;
+    int          editor_bitmask;
+    UIButtonList buttons;         /* botones estaticos (Pause, Save, etc.) */
+    UIButtonList entity_buttons;  /* botones dinamicos de entidades */
 }EditorState;
 
 void init_editor();

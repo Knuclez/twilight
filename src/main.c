@@ -4,6 +4,7 @@
 #include "interface/input.h"
 #include "game_manager.h"
 #include "editor.h"
+#include "save_load.h"
 
 const int FPS = 60;
 const int FRAME_TIME = 1000/ FPS;
@@ -18,6 +19,7 @@ int initialize_stuff(){
     }
 
     initialize_game_systems();
+    entities_load();   /* restaurar sesion anterior si existe */
     init_editor();
     last_frame_time = SDL_GetTicks();
 
@@ -25,6 +27,7 @@ int initialize_stuff(){
 }
 
 void terminate_stuff(){
+    entities_save();   /* persistir estado antes de cerrar */
     terminate_sdl();
 }
 
