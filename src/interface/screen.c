@@ -11,7 +11,7 @@
 #include "systems/movement.h"
 
 #include "entities.h"  /* unified entity storage */
-#include "editor.h"
+#include "editor/editor_main.h"
 
 void screen_entity_clicked(int id_ent){
     (void)id_ent;

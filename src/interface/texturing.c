@@ -47,7 +47,7 @@ void load_img_texture(SDL_Renderer *renderer,int index,char* dir){
 
 void load_textures(SDL_Renderer *renderer){
     memset(textures, 0, N_TEXTURES * sizeof(SDL_Texture*));
-    ougkeh_font = TTF_OpenFont("assets/oughek-font.otf", 40);
+    ougkeh_font = TTF_OpenFont("assets/fonts/CommitMonoNerdFont-Regular.otf", 20);
     if (!ougkeh_font) {
         printf("TTF_OpenFont failed: %s\n", TTF_GetError());
         return;

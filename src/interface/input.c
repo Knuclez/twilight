@@ -4,7 +4,7 @@
 #include "interface/screen.h"
 #include "interface/input.h"
 #include "input_handler.h"
-#include "editor.h"
+#include "editor/editor_main.h"
 
 
 SDL_GameController *controller = NULL;

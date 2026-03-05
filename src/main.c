@@ -3,7 +3,7 @@
 #include "interface/rendering/render_main.h"
 #include "interface/input.h"
 #include "game_manager.h"
-#include "editor.h"
+#include "editor/editor_main.h"
 #include "save_load.h"
 
 const int FPS = 60;
