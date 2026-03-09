@@ -27,7 +27,8 @@ int initialize_stuff(){
 }
 
 void terminate_stuff(){
-    entities_save();   /* persistir estado antes de cerrar */
+    //NO auto save for now
+    //entities_save();   /* persistir estado antes de cerrar */
     terminate_sdl();
 }
 

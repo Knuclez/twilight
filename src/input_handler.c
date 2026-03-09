@@ -25,7 +25,7 @@ void event_key_down_handle(SDL_Event event){
     }
     if(event.key.keysym.sym == SDLK_j){
         Action new_act = {0};
-        new_act.type = PLAYER_ATTACK;
+        new_act.type = ATTACK_ACTION;
         new_act.data.attacker_key = player;
         queue_action(new_act);
     }

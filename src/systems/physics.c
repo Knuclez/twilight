@@ -29,24 +29,25 @@ void individual_collider_check_collisions(EntityKey ent, EntityKey causal_ent){
     for (int i = 0; i < entities_max_index(); i++) {
         e = ents[i];
         if (e.key.index <= 0) continue;
+        if (e.key.index == causal_ent.index) continue;
         if (e.bitmask & HAS_COLIDER_MASK) {
-	    left_side = to_check.position.x - to_check.physical_bounds.width + to_check.physical_bounds.x;
-	    r_s = e.position.x + e.physical_bounds.width + to_check.physical_bounds.x;
+	    left_side = to_check.position.x - to_check.size.x + to_check.physical_bounds.x;
+	    r_s = e.position.x - e.size.x + e.physical_bounds.x + e.physical_bounds.width * 2;
 	    if(left_side > r_s){
 		continue;
 	    }
-	    right_side = to_check.position.x + to_check.physical_bounds.width + to_check.physical_bounds.x;
-	    l_s = e.position.x - e.physical_bounds.width + to_check.physical_bounds.x;
+	    right_side = to_check.position.x - to_check.size.x + to_check.physical_bounds.x + to_check.physical_bounds.width * 2;
+	    l_s = e.position.x - e.size.x + e.physical_bounds.x;
 	    if(right_side < l_s){
 		continue;
 	    }
-	    top = to_check.position.y - to_check.physical_bounds.height + to_check.physical_bounds.y;
-	    b = e.position.y + e.physical_bounds.height + to_check.physical_bounds.y;
+	    top = to_check.position.y - to_check.size.y + to_check.physical_bounds.y;
+	    b = e.position.y - e.size.y + e.physical_bounds.y + e.physical_bounds.height * 2;
 	    if(top > b){
 		continue;
 	    }
-	    bottom = to_check.position.y + to_check.physical_bounds.height + to_check.physical_bounds.y;
-	    t = e.position.y - e.physical_bounds.height + to_check.physical_bounds.y;
+	    bottom = to_check.position.y - to_check.size.y + to_check.physical_bounds.y + to_check.physical_bounds.height * 2;
+	    t = e.position.y - e.size.y + e.physical_bounds.y;
 	    if(bottom < t){
 		continue;
 	    }

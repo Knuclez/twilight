@@ -25,7 +25,7 @@
 #define HAS_COLIDER_MASK	0b00000000000000000000000001000000
 
 //TYPES
-typedef enum {NCC, MOB} CombatType;  //NCC = no combatable character;
+typedef enum {NCC, MOB, PLAYER} CombatType;  //NCC = no combatable character;
 
 /* basic component types previously defined in their own headers */
 typedef struct { int x; int y; } Position;

@@ -22,7 +22,7 @@ int initialice_sdl(){
 	return 0;
     }
      window = SDL_CreateWindow("Hola",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-				800, 600,
+				1080, 920,
 				SDL_WINDOW_OPENGL);
     if (!window){
 	printf("Error creating the window: %s \n", SDL_GetError());

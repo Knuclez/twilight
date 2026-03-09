@@ -47,21 +47,35 @@ void combat_system_tick(GameState *gs){
 	attacker_key = collision_q.collisions[i].causal_entity;
 	attack_key = collision_q.collisions[i].entity1;
 	attacked_key = collision_q.collisions[i].entity2;
-	if(entity_get_combat_type(attacked_key) != MOB){continue;}
+	CombatType attacked_type = entity_get_combat_type(attacked_key);
+	if(attacked_type == NCC || attacked_type == entity_get_combat_type(attacker_key)){continue;}
 	int dc = entity_get_damage(attack_key);
 	int hc = entity_get_health(attacked_key);
 
 	int new_health = hc - dc;
 	entity_set_health(attacked_key, new_health);
-	entity_set_target(attacked_key, attacker_key);
 	entity_set_combat_state(attacked_key, TREMBLE);
 	entities[attacked_key.index].bitmask &= ~IS_MOVING_MASK;
 	entity_set_direction_vec(attacked_key, 0, 0);
 	entity_set_combat_state_timer(attacked_key, 10);
+	entity_set_target(attacked_key, attacker_key);
 	if (new_health <= 0){
 	    entity_deactivate(gs->entities, attacked_key);
 	}
 	printf("%u health\n", new_health);
+    }
+
+    /* recover PLAYER entities from TREMBLE (MOBs are handled by tick_npc_ai) */
+    for (int i = 0; i < ent_count; i++){
+	Entity *e = &entities[i];
+	if (e->key.index <= 0) continue;
+	if (entity_get_combat_type(e->key) != PLAYER) continue;
+	if (e->combat_state != TREMBLE) continue;
+	e->combat_state_timer -= 1;
+	if (e->combat_state_timer <= 0){
+	    e->combat_state = CHILL;
+	    e->bitmask |= IS_MOVING_MASK;
+	}
     }
 
    return;

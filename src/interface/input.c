@@ -56,6 +56,10 @@ void interpret_mouse_button(SDL_Event event){
 }
 
 void interpret_text_event(SDL_Event event){
+    if (editor_is_active()){
+        editor_text_input(event);
+        return;
+    }
     screen_text_event(event);
 }
 

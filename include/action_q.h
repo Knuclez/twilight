@@ -6,7 +6,7 @@
 #define MAX_ACTIONS 64
 
 typedef enum {
-    PLAYER_ATTACK,
+    ATTACK_ACTION,
 } ActionType;
 
 

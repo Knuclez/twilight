@@ -29,6 +29,8 @@ void instance_rapp(){
     entity_set_direction(key, DIR_IDLE);
     entity_set_direction_vec(key, 0, 0);
     entity_set_animation(key, 0);
+    entity_set_health(key, 100);
+    entity_set_combat_type(key, PLAYER);
 
     bitmask |= HAS_ANIMATION_MASK;
     bitmask |= IS_DRAWABLE_MASK;
@@ -45,7 +47,7 @@ void instance_kuribo(){
     entity_set_position(key, 300, 500);
     entity_set_size(key, 50, 50);
     entity_set_health(key, 40);
-    entity_set_physical_bounds(key, 0, 0, 50, 50);
+    entity_set_physical_bounds(key, 12, 10, 30, 30);
     entity_set_sprite_source(key, 2, 0, 0, 512, 512);
     entity_set_direction(key, DIR_IDLE);
     entity_set_direction_vec(key, 0, 0);
@@ -63,7 +65,7 @@ void instance_tree(){
 
     entity_set_position(key, 300, 200);
     entity_set_size(key, 100, 100);
-    entity_set_physical_bounds(key, 0, 0, 50, 50);
+    entity_set_physical_bounds(key, 72, 100, 29, 50);
     entity_set_sprite_source(key, 0, 66, 66, 64, 64);
     bitmask |= IS_DRAWABLE_MASK;
     bitmask |= HAS_COLIDER_MASK;

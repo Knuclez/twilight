@@ -27,7 +27,7 @@ void process_action_q(int current_time){
     for(int i = 0; i < actn_amt ; i++){
 	Action actn = act_list[i];
 	switch(actn.type){
-	    case PLAYER_ATTACK:
+	    case ATTACK_ACTION:
 		// Accedemos directamente a la struct en la union
 		combat_process_attack(actn.data.attacker_key);
 		break;

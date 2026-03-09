@@ -7,6 +7,7 @@
 #include "game_state.h"
 #include "interface/rendering/texturing.h"
 #include "interface/UI/ui_button.h"
+#include "interface/UI/ui_input_field.h"
 
 /* Declarada en editor_main.c (no-static) */
 void btn_entity_selected(int index);
@@ -84,8 +85,6 @@ static void render_inspector(SDL_Renderer *renderer, int w, int h){
     if (inspected_ent.key.index == 0) return;
     if (inspected_ent.key.generation != es->inspected_entity.generation) return;
 
-    printf("x is %u\n", inspected_ent.position.x);
-
     int inspector_w = w / 4;
     int inspector_x = w - inspector_w;
     SDL_SetRenderDrawColor(renderer, 40, 40, 40, 50);
@@ -105,7 +104,9 @@ void editor_render(SDL_Renderer *renderer){
 
     render_border(renderer, w, h);
     render_fps(renderer);
-    ui_button_render(&es->buttons, renderer);   /* botones fijos (Pause, Save) */
+    ui_button_render(&es->buttons, renderer);        /* botones fijos (Pause, Save) */
+    ui_input_field_render(&es->input_fields, renderer); /* campos de texto */
+    ui_text_label_render(&es->text_labels, renderer);
     render_entity_panel(renderer, panel_x, panel_w, h);
     render_inspector(renderer, w, h);
 }
